@@ -1,0 +1,6 @@
+@prefix : <http://example.onto/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+:Icaro a :Mortal .
+:Mortal a owl:Class .
+:Human a owl:Class .

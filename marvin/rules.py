@@ -3,7 +3,8 @@ import warnings
 from FuXi.Rete.RuleStore import SetupRuleStore
 from FuXi.Horn.HornRules import HornFromN3
 from FuXi.Rete.Util import generateTokenSet
-from rdflib.Graph import Graph
+
+from marvin.utils import get_empty_graph
 
 
 warnings.filterwarnings("ignore")
@@ -28,7 +29,7 @@ class Inference():
 
     def __init__(self):
         self.network = build_rdfs_owl_rules()
-        closureDeltaGraph = Graph()
+        closureDeltaGraph = get_empty_graph()
         self.network.inferredFacts = closureDeltaGraph
 
     def add_facts(self, facts):

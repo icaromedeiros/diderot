@@ -4,19 +4,19 @@ clean:
 
 test: clean pep8 pep8_tests
 	@echo "Running pep8, unit and integration tests..."
-	@nosetests -s  --with-coverage --cover-inclusive --cover-package=marvin --tests=tests --with-xunit
+	@nosetests -s --with-coverage --cover-branches --cover-inclusive --cover-package=marvin --tests=tests --with-xunit --with-spec --spec-color --exclude=src/marvin/case.py
 
 unit: clean
 	@echo "Running unit tests..."
-	@nosetests -s --with-coverage --cover-inclusive --cover-package=marvin --tests=tests/unit --with-xunit
+	@nosetests -s --with-coverage --cover-branches --cover-inclusive --cover-package=marvin --tests=tests/unit --with-xunit --with-spec --spec-color
 
 functional: clean
 	@echo "Running functional tests..."
-	@nosetests -s --with-coverage --cover-inclusive --cover-package=marvin --tests=tests/functional --with-xunit
+	@nosetests -s --with-coverage --cover-branches --cover-inclusive --cover-package=marvin --tests=tests/functional --with-xunit --with-spec --spec-color
 
 acceptance: clean
 	@echo "Running acceptance tests..."
-	@nosetests -s --with-coverage --cover-inclusive --cover-package=marvin --tests=tests/acceptance --with-xunit
+	@nosetests -s --with-coverage --cover-branches --cover-inclusive --cover-package=marvin --tests=tests/acceptance --with-xunit --with-spec --spec-color
 
 pep8:
 	@echo "Checking source-code PEP8 compliance"
