@@ -1,10 +1,12 @@
+CWD="`pwd`"
+
 clean:
 	@find . -name "*.pyc" -delete
 	@find . -name "__pycache__" -delete
 
 test: clean pep8 pep8_tests
 	@echo "Running pep8, unit and integration tests..."
-	@nosetests -s --with-coverage --cover-branches --cover-inclusive --cover-package=marvin --tests=tests --with-xunit --with-spec --spec-color --exclude=src/marvin/case.py
+	@nosetests -s --with-coverage --cover-branches --cover-inclusive --cover-package=marvin --tests=tests --with-xunit --with-spec --spec-color --with-timer --exclude=src/marvin/case.py
 
 unit: clean
 	@echo "Running unit tests..."
@@ -31,3 +33,10 @@ install:
 	@pip install ez_setup
 	@pip install -r requirements.txt
 	@pip install -r requirements_test.txt
+
+report:
+	@echo "Making report..."
+	@cd $(CWD)/project_report; pdflatex report.tex
+	@cd $(CWD)/project_report; bibtex report.aux
+	@cd $(CWD)/project_report; pdflatex report.tex
+	@cd $(CWD)/project_report; open report.pdf

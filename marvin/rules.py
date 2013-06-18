@@ -25,10 +25,13 @@ def build_rdfs_owl_rules():
     return network
 
 
+RDFS_OWL_RULES = build_rdfs_owl_rules()
+
+
 class Inference():
 
     def __init__(self):
-        self.network = build_rdfs_owl_rules()
+        self.network = RDFS_OWL_RULES
         closureDeltaGraph = get_empty_graph()
         self.network.inferredFacts = closureDeltaGraph
 
