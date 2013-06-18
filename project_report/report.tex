@@ -1,19 +1,20 @@
 \documentclass{report}
-
 \usepackage{graphicx}
 \usepackage[utf8]{inputenc}
+\usepackage[toc,page]{appendix}
 
+\linespread{1.5}
 \begin{document}
 
-\title{Marvin - A Test Driven Development Tool for RDF/OWL ontologies}
+\title{Marvin - A Test Driven Development Tool for developing RDF/OWL ontologies}
 \author{
 Ícaro Medeiros\\
 Matrícula 1212403
 \\ \\ \\ \\ \\ \\ \\ \\
-Pontifical Catholic University of Rio de Janeiro
-Doctorate in Computer Science
-INF 2102 - Programming Final Project (Projeto final de Programação)
-Coordinator: Prof. Arndt Von Staa
+Pontifical Catholic University of Rio de Janeiro \\
+Doctorate in Computer Science \\
+INF 2102 - Programming Final Project (Projeto final de Programação) \\
+Coordinator: Prof. Arndt Von Staa \\
 Advisor: Prof. Daniel Schwabe
 }
 
@@ -22,28 +23,87 @@ Advisor: Prof. Daniel Schwabe
 
 \chapter{Introduction}
 
-Ontology engineering is a hard task. Many methodologies have been proposed
-to cope with this task %cite
+Test Driven Development (TDD) techniques have been successfully used in
+software engineering \cite{beck03}, providing an iterative, agile and incremental way of developing
+code. In this approach, programmers start by writing tests for their code, then programming the code
+so the tests do not fail. Then code can be enhanced and checked against tests again, completing a desirable
+test-write-refactor cycle.
 
-% ontology engineering -> waterfall
+TDD is a safe methodology to develop programs, where we can be sure that changes do not
+introduce bugs or unexpected behavior by running our automated tests for our code. Moreover,
+by doing tests first, we can check our architecture decisions simply by being clients of our own code
+in our tests. Finally (?), the tests can be seen as a documentation about the code.
 
-While these methodologies are of value, sometimes ontology authors
-can not know by advance what kinds of inferences their ontologies will
-provide. Checking the ontology for self-consistency is also a demanding task.
+Almost all modern programming languages have unit test frameworks that enable to run
+automated tests for your code and engage into a TDD process for software, such as the xUnit
+framework \cite{beck03}.
 
-Moreover, Test Driven Development techniques have been successfully used in
-software engineering, providing an iterative, agile and incremental way of developing
-code. Ontology engineering could benefit from a process like this, using small iterations
+In a TDD approach you can start with simple software units, in a bottom-up way,
+rather than over modeling all your system in advance, the so called Big Design Up Front (BDUF).
+This leads to code that can rapidly be released, in short cycles, enabling early releases of
+shipable software for the clients to validate and provide feedback, a premise in Agile
+Software Process Methodologies \cite{beck01, beck04, martin03}.
+
+Ontology engineering could benefit from a TDD process like this, using small iterations
 to ensure a good quality ontology, consistent, well tested and ready for evolution.
 
 \section{Test Driven Development for Ontologies}
 
+During the ontology development authors might not be aware what kinds of inferences their ontologies are
+providing, for example, if a new rule introduced unexpected inference. Checking the ontology for
+self-consistency is also a demanding task.
+
+As stated in \cite{vrandevcic06}, the idea of design by contract, well known in Software Engineering can
+be used to Ontology Engineering as follows: we could declare what statements should and
+should not derive from an ontology being developed. Thus we can be sure if expected inferences are
+derived and be aware of unexpected inferred conclusions.
+
+Moreover, competency questions, as defined by some methodologies for Ontology Engineering like Methontology \cite{lopez99},
+describe what kind of knowledge the resulting ontology is supposed to answer. These questions can always be formalized in
+a query language (like SPARQL). By formalizing the queries and the expected answers, a system can automatically checks if
+the ontology meets the requirements stated with the competency questions.
+
+% example
+
+To answer these needs in this report is proposed a novel Test Driven Development tool for building RDF/OWL ontologies, called
+Marvin. This report is organized as follows: the Chapter \ref{system} describes the requirements, use cases, architecture and
+how Marvin was built. In Chapter \ref{manual} it is described how to use Marvin in all its use cases, including installation.
+Finally, in Chapter \ref{conclusion} we present concluding remarks and future goals for the project.
 
 \chapter{System description}
+\label{system}
+
+This chapter will describe the goals defined for Marvin, a tool for Test Driven Development for building RDF/OWL ontologies
+and how the system was built, including use cases, architecture and the engineering process.
 
 \section{Goals}
+\label{goals}
+
+The main goals of Marvin is to provide a simple interface to test small portions of ontologies regarding:
+
+\begin{itemize}
+    \item Expected inferences. The system must check if expected inferences are satisfied by the ontology
+        given as input.
+    \item Check for unexpected inferences. The system must guarantee that no unexpected inferences are
+        derived from the target ontology.
+    \item Self consistency check. The system must check if rules stated in the ontology do not
+        contradict each other thus leading to guaranteed ontology consistency.
+    \item Answering competency questions. The system must check if answers to competency questions are
+        the same as users expect, given the target ontologies and the knowledge base which uses the ontology.
+\end{itemize}
 
 \section{Requirements}
+
+The requirements of Marvin follows:
+\begin{itemize}
+    \item To provide facilities for testing ontologies regarding the goals mentioned in Section \ref{goals}.
+    \item To provide a simple Domain Specific Language for writting tests for ontologies. The API of the tool must be simple
+        to use and extend to cover different test scenarios.
+    \item To be written in Python. As the main language used in Globo.com having a tool written in Python is desirable.
+        Moreover, the possibility to reuse tools such as RDFlib (for dealing with RDF data), the inference library FuXi
+        and the Python unit testing framework lead to the requirement of using Python.
+        Finally, Python is a multi-plataform language so the tool is available for all platforms that Python supports.
+\end{itemize}
 
 \subsection{Use cases}
 
@@ -58,16 +118,26 @@ Version control: git, github
 \subsection{Tests}
 
 \chapter{User manual}
+\label{manual}
 
 \section{Installing}
 
+
+\section{Documentation}
+
 \section{Use examples}
 
-% appendix: CD content
+\chapter{Conclusion}
+\label{conclusion}
 
-Ontology development
+\section{Future Work}
 
-bla bla bla \cite{vrandevcic06}
+\begin{appendices}
+\chapter{CD content}
+
+The CD ...
+
+\end{appendices}
 
 \bibliographystyle{plain}
 \bibliography{refs}

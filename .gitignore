@@ -27,14 +27,17 @@ pip-log.txt
 nosetests.xml
 
 # Latex
-.log
-.aux
-.bbl
-.blg
-.pdf
-.toc
+*.log
+*.aux
+*.bbl
+*.blg
+*.pdf
+*.toc
 
 # Docs
 docs/_static/*
 docs/_templates/*
 docs/_build/*
+
+# Mac
+.DS_Store

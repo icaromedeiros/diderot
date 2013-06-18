@@ -39,4 +39,6 @@ report:
 	@cd $(CWD)/project_report; pdflatex report.tex
 	@cd $(CWD)/project_report; bibtex report.aux
 	@cd $(CWD)/project_report; pdflatex report.tex
+	@cd $(CWD)/project_report; bibtex report.aux
+	@cd $(CWD)/project_report; pdflatex report.tex
 	@cd $(CWD)/project_report; open report.pdf
