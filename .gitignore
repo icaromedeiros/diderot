@@ -33,6 +33,7 @@ nosetests.xml
 *.blg
 *.pdf
 *.toc
+*.out
 
 # Docs
 docs/_static/*

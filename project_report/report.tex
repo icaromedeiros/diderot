@@ -1,9 +1,13 @@
 \documentclass{report}
+
+\setcounter{tocdepth}{3} % put subsubsections in TOC
 \usepackage{graphicx}
+\usepackage{url}
+\usepackage{hyperref}
 \usepackage[utf8]{inputenc}
 \usepackage[toc,page]{appendix}
-
 \linespread{1.5}
+
 \begin{document}
 
 \title{Marvin - A Test Driven Development Tool for developing RDF/OWL ontologies}
@@ -36,7 +40,7 @@ in our tests. Finally (?), the tests can be seen as a documentation about the co
 
 Almost all modern programming languages have unit test frameworks that enable to run
 automated tests for your code and engage into a TDD process for software, such as the xUnit
-framework \cite{beck03}.
+framework \cite{beck03} and its implementations (JUnit, Python unit testing framework, etc).
 
 In a TDD approach you can start with simple software units, in a bottom-up way,
 rather than over modeling all your system in advance, the so called Big Design Up Front (BDUF).
@@ -63,14 +67,14 @@ describe what kind of knowledge the resulting ontology is supposed to answer. Th
 a query language (like SPARQL). By formalizing the queries and the expected answers, a system can automatically checks if
 the ontology meets the requirements stated with the competency questions.
 
-% example
+% TODO example
 
 To answer these needs in this report is proposed a novel Test Driven Development tool for building RDF/OWL ontologies, called
 Marvin. This report is organized as follows: the Chapter \ref{system} describes the requirements, use cases, architecture and
 how Marvin was built. In Chapter \ref{manual} it is described how to use Marvin in all its use cases, including installation.
 Finally, in Chapter \ref{conclusion} we present concluding remarks and future goals for the project.
 
-\chapter{System description}
+\chapter{System Description}
 \label{system}
 
 This chapter will describe the goals defined for Marvin, a tool for Test Driven Development for building RDF/OWL ontologies
@@ -84,7 +88,7 @@ The main goals of Marvin is to provide a simple interface to test small portions
 \begin{itemize}
     \item Expected inferences. The system must check if expected inferences are satisfied by the ontology
         given as input.
-    \item Check for unexpected inferences. The system must guarantee that no unexpected inferences are
+    \item Check for lack of unexpected inferences. The system must guarantee that no unexpected inferences are
         derived from the target ontology.
     \item Self consistency check. The system must check if rules stated in the ontology do not
         contradict each other thus leading to guaranteed ontology consistency.
@@ -96,7 +100,11 @@ The main goals of Marvin is to provide a simple interface to test small portions
 
 The requirements of Marvin follows:
 \begin{itemize}
-    \item To provide facilities for testing ontologies regarding the goals mentioned in Section \ref{goals}.
+    \item To provide facilities for testing ontologies regarding the goals mentioned in Section \ref{goals}: cheking
+        expected and lack of unexpected inferences, self consistency and proper competency questions answering.
+    \item The input to the system should be made in many formats possible, such as Turtle format for RDF serialization,
+        as a simple way of writting RDF. The input might be a string representing RDF in Turtle format, a file or a
+        URI that contains a RDF ontology. Also, it is desirable to provide a SPARQL interface to writting competency questions.
     \item To provide a simple Domain Specific Language for writting tests for ontologies. The API of the tool must be simple
         to use and extend to cover different test scenarios.
     \item To be written in Python. As the main language used in Globo.com having a tool written in Python is desirable.
@@ -105,19 +113,72 @@ The requirements of Marvin follows:
         Finally, Python is a multi-plataform language so the tool is available for all platforms that Python supports.
 \end{itemize}
 
-\subsection{Use cases}
+\subsection{Use Cases}
+
+The use cases follow strictly the goals stated in Section \ref{goals}. A diagram summarizing the use cases is seen
+in Figure \ref{figUseCase}.
+
+\begin{figure}[!hbt]
+    \centering
+    \label{figUseCase}
+    \caption{Use case diagram for Marvin}
+    \includegraphics[scale=0.5]{fig/use_case_diagram.png}
+\end{figure}
+
+Following, the use cases will be described as user stories \cite{beck04}.
+
+\subsubsection{Check Expected Inference}
+
+As a ontology developer, I want to check expected inferences in ontologies so that I can develop them
+in a safe way and be assure that their evolution will not break rules or invalidate previously
+functional inferences.
+
+\subsubsection{Check for lack of Unexpected Inference}
+
+As a ontology developer, I want to check for lack of unexpected inferences so that unwanted facts
+derived from the ontology do no harm ontology consistency or its uses.
+
+\subsubsection{Check Ontology Self Consistency}
+
+As a ontology developer, I want to check ontology for self consistency so that inferences are able to
+function properly.
+
+\subsubsection{Check Answering to Competency Question}
+
+As a ontology developer, I want to check expected answers for competency questions that are required
+so that ontology can fulfill its goal. The question can be asked as a SPARQL query.
 
 \section{Architecture}
 
-\section{Engineering process}
+Marvin is organized as follows, lalala. This is summarized in Figure \ref{figArchitecture}.
 
-TDD
+%\begin{figure}[!hbt]
+%    \centering
+%    \label{figUseCase}
+%    \caption{Marvin architecture}
+%    \includegraphics[scale=0.5]{fig/use_case_diagram.png}
+%\end{figure}
+
+\section{Engineering Process}
+
+In the development of Marvin, the code (and this report) was hosted in Github
+\footnote{Available at \url{http://github.com/icaromedeiros/marvin}}, a social coding tool that enables free software
+sharing. The Semantic Web community and all users are welcome to contribute to the project and give feedback. Within
+github users can open issues, fork the project (create your own copy) and perform pull requests (patches to the
+current code to be accepted by project maintainers) and so on in order to evolve the software. As today, many
+important project are hosted on Github such as linux or Rails \footnote{Available at \url{http://github.com/torvalds/linux}
+and \url{http://github.com/rails/rails}}. Git version control was used in the software development, as it is the
+default system used in Github and currently the most complete and popular version control system.
+
+As a software development methodology the Extreme Programming \cite{beck04} was chosen, with a focus on Test Driven
+Development. It would be rather contradictory to build a TDD tool without using the methodology in its own development.
+
 
 Version control: git, github
 
 \subsection{Tests}
 
-\chapter{User manual}
+\chapter{User Manual}
 \label{manual}
 
 \section{Installing}
@@ -125,7 +186,7 @@ Version control: git, github
 
 \section{Documentation}
 
-\section{Use examples}
+\section{Use Examples}
 
 \chapter{Conclusion}
 \label{conclusion}
@@ -133,7 +194,7 @@ Version control: git, github
 \section{Future Work}
 
 \begin{appendices}
-\chapter{CD content}
+\chapter{CD Content}
 
 The CD ...
 
