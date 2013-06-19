@@ -6,7 +6,7 @@ clean:
 
 test: clean pep8 pep8_tests
 	@echo "Running pep8, unit and integration tests..."
-	@nosetests -s --with-coverage --cover-branches --cover-inclusive --cover-package=marvin --tests=tests --with-xunit --with-spec --spec-color --with-timer --exclude=src/marvin/case.py
+	@nosetests -s --with-coverage --cover-branches --cover-inclusive --cover-package=marvin --tests=tests --with-xunit --with-spec --spec-color --exclude=src/marvin/case.py
 
 unit: clean
 	@echo "Running unit tests..."
