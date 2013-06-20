@@ -161,22 +161,42 @@ Marvin is organized as follows, lalala. This is summarized in Figure \ref{figArc
 
 \section{Engineering Process}
 
-In the development of Marvin, the code (and this report) was hosted in Github
+During the development of Marvin, the code (and this report) was hosted in Github
 \footnote{Available at \url{http://github.com/icaromedeiros/marvin}}, a social coding tool that enables free software
-sharing. The Semantic Web community and all users are welcome to contribute to the project and give feedback. Within
-github users can open issues, fork the project (create your own copy) and perform pull requests (patches to the
+sharing. The Semantic Web community and all users are welcome to contribute to the project and give feedback.
+
+Within Github users can open issues, fork the project (create your own copy) and perform pull requests (patches to the
 current code to be accepted by project maintainers) and so on in order to evolve the software. As today, many
 important project are hosted on Github such as linux or Rails \footnote{Available at \url{http://github.com/torvalds/linux}
-and \url{http://github.com/rails/rails}}. Git version control was used in the software development, as it is the
+and \url{http://github.com/rails/rails}}.
+
+Git version control was used in the software development, as it is the
 default system used in Github and currently the most complete and popular version control system.
+
+An example of the Github page for the project is seen in Figure \ref{figGithub}. In the inferior part of the figure we can see a build status badge (on green), stating that the build is passing. This is another agile development tecnhique used in Marvin: Continuos Integration \cite{beck04}. Every change pushed into Marvin's repository on github triggers automatically a run on the automated tests (fully explained in Section \ref{tests}), using the Travis CI\footnote{Available at \url{http://www.travis-ci.org/}} tool.
+
+\begin{figure}[!hbt]
+    \centering
+    \label{figGithub}
+    \caption{Github page of Marvin}
+    \includegraphics[scale=0.4]{fig/github.png}
+\end{figure}
 
 As a software development methodology the Extreme Programming \cite{beck04} was chosen, with a focus on Test Driven
 Development. It would be rather contradictory to build a TDD tool without using the methodology in its own development.
-
-
-Version control: git, github
+The tests are described next.
 
 \subsection{Tests}
+\label{tests}
+
+
+XXX functional tests
+
+XXX unit tests
+
+XXX acceptance tests
+
+100\% branch coverage
 
 \chapter{User Manual}
 \label{manual}
