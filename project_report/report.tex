@@ -97,6 +97,7 @@ The main goals of Marvin is to provide a simple interface to test small portions
 \end{itemize}
 
 \section{Requirements}
+\label{requirements}
 
 The requirements of Marvin follows:
 \begin{itemize}
@@ -150,14 +151,23 @@ so that ontology can fulfill its goal. The question can be asked as a SPARQL que
 
 \section{Architecture}
 
-Marvin is organized as follows, lalala. This is summarized in Figure \ref{figArchitecture}.
+Marvin architecture is summarized in Figure \ref{figArchitecture}.
+The \texttt{case} module is the interface with our users (programmers).
+Users must extend \texttt{MarvinTestCase} (main class in \texttt{case} module) in their test cases to use Marvin.
+\texttt{MarvinTestCase}, in turn, extends \texttt{TestCase} (from \texttt{unittest}, the Python unit testing framework).
+In Marvin's test cases, assertions (in the \texttt{assertion} module) are used to check, for example, that expected facts can be inferred from the input ontology.
 
-%\begin{figure}[!hbt]
-%    \centering
-%    \label{figUseCase}
-%    \caption{Marvin architecture}
-%    \includegraphics[scale=0.5]{fig/use_case_diagram.png}
-%\end{figure}
+Finally, assertions use the \texttt{rules} modules to trigger inferences in \texttt{FuXi}, a inference machine written in Python.
+\texttt{Fuxi} uses rules that express RDF and OWL semantics to perform its inferences.
+
+\texttt{RDFLib} and the \texttt{utils} package are used through all the code to perform utilitary functions such as parsing of ontologies written in Turtle format for RDF, checking if a \texttt{RDFLib graph} object contains a subset of triples of another object and so on.
+
+\begin{figure}[!hbt]
+    \centering
+    \label{figArchitecture}
+    \caption{Marvin architecture}
+    \includegraphics[scale=0.33]{fig/architecture.png}
+\end{figure}
 
 \section{Engineering Process}
 
@@ -189,25 +199,73 @@ The tests are described next.
 \subsection{Tests}
 \label{tests}
 
+In the Test Driven Development used to create Marvin different kinds of tests were used, namely:
 
-XXX functional tests
+\begin{itemize}
+    \item Unit tests. Testing only small portions of code make the software APIs better, clean code safe for changes.
+        It is done considering the code behind it, i.e. it is a white-box test.
+    \item Functional tests. A quality assurance test that integrate multiple parts of the software and test broader
+        functionalities, where nearly real data is often used.
+        It is a black-box test as the internal program structure is mainly not considered.
+    \item Acceptance tests. Test the software contract, i.e. if the requirements are fully satisfied. Mainly involve
+        user interface tests, but as Marvin is mainly a developer tool, our acceptance tests are unit tests for ontologies
+        using our tool and real examples of ontologies that test our requirements (Section \ref{requirements}).
+\end{itemize}
 
-XXX unit tests
+\subsubsection{Unit Tests}
 
-XXX acceptance tests
+Currently, Marvin has XXX unit tests, covering 100\% of the code\footnote{Using coverage tool, available at \url{https://pypi.python.org/pypi/coverage}}.
+Not only all the lines are tested, but all code branches (e.g. all conditional flows).
 
-100\% branch coverage
+\subsubsection{Functional Tests}
+
+Currenly, Marvin has XXX functional tests, covering XX\% of the code.
+Functional tests cover broader functionalities such as asserting correct inference using different OWL capabilities.
+
+\subsubsection{Acceptance Tests}
+
+Acceptance tests cover all the requirements of the software to validate all the software use cases and cycles.
+These tests are also used in the user manual \cite{manual} as they present real examples on how to use our tool.
 
 \chapter{User Manual}
 \label{manual}
 
-\section{Installing}
-
+Software documentation is rather confuse and incomplete.
+A good documentation can make a real difference between low or high adopted software.
+Therefore, Marvin documentation is extensive and well designed.
 
 \section{Documentation}
 
 The documentation is available online at \url{https://marvin.readthedocs.org}.
+Using sphinx tool\footnote{Available at \url{http://sphinx-doc.org/}}, it was created documentation using
+reStructuredText, a simple format to write documentation.
+Sphinx compile the \texttt{.rst} files into HTML files that create a browsable and very usable documentation.
 
+Besides the user documentation, API documentation was created automatically by using docstring code (i.e. comments on method headers) and
+the autodoc Sphinx plugin.
+This enables programmers to understand how the code works very fast.
+
+% TODO Example with figure
+
+\section{Installing}
+
+To install Marvin, first users need to have Python 2.7 installed \footnote{Instructions for installing Python in all platforms can be found in \url{www.python.org/download}}.
+Pip tool is also need for installed all the required libraries \footnote{Instruction for installing pip can be found here \url{http://www.pip-installer.org/en/latest/installing.html}}.
+It is recommended to use virtualenv tool \footnote{It is recommended to use virtualenv with virtualenvwrapper. Install these tool by using \texttt{pip install virtualenv} and \texttt{pip install virtualenvwrapper}.} to use different environments for Python projects.
+
+After this, simply type \texttt{pip install marvin} and all its dependencies in the selected virtualenv, as seen in Figure \ref{figInstalling}.
+
+% TODO figure
+
+\subsection{Marvin dependencies}
+
+Marvin reuses some libraries to work, namely:
+
+\begin{itemize}
+    \item \texttt{rdflib==2.4.2}. Library for parsing RDF files into Python objects, different types of RDF serialization and other facilities for dealing with RDF data.
+    \item \texttt{FuXi==1.4.production}. Library for OWL inference on Python.
+        It is needed to infer facts that can be derived from ontologies.
+\end{itemize}
 \section{Use Examples}
 
 \chapter{Conclusion}
