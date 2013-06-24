@@ -8,10 +8,15 @@ Welcome to Marvin's documentation!
 
 Marvin is a framework for TDD of RDF/OWL ontologies.
 
-Contents:
+Examples:
 
 .. toctree::
    :maxdepth: 2
+
+   examples/check_expected_facts.rst
+
+Marvin API:
+
 
 
 

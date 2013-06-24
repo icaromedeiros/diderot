@@ -1,0 +1,5 @@
+@prefix : <http://example.onto/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+:Human rdfs:subClassOf :Mortal .
+:Icaro a :Human .
