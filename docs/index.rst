@@ -8,6 +8,8 @@ Welcome to Diderot's documentation!
 
 Diderot is a framework for Test Driven Development of RDF/OWL ontologies.
 
+Installation
+
 Examples:
 
 .. toctree::
