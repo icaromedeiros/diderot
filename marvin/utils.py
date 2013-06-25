@@ -10,7 +10,7 @@ from rdflib import Graph, StringInputSource
 from marvin.OWL import OWLNS
 
 SUPPORTED_URL_SCHEMES = ("http", "https", "file")
-AVAILABLE_INPUT_FORMATS_MESSAGE = "Available formats: a string URI, a string file path," + \
+AVAILABLE_INPUT_FORMATS_MESSAGE = "Available formats: a string URI, a string relative file path," + \
     "a string in N3/Turle format, or a rdflib.Graph object."
 
 
