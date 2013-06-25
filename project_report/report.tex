@@ -10,7 +10,7 @@
 
 \begin{document}
 
-\title{Marvin - A Test Driven Development Tool for developing RDF/OWL ontologies}
+\title{Diderot - A Test Driven Development Tool for developing RDF/OWL ontologies}
 \author{
 Ícaro Medeiros\\
 Matrícula 1212403
@@ -70,20 +70,20 @@ the ontology meets the requirements stated with the competency questions.
 % TODO example
 
 To answer these needs in this report is proposed a novel Test Driven Development tool for building RDF/OWL ontologies, called
-Marvin. This report is organized as follows: the Chapter \ref{system} describes the requirements, use cases, architecture and
-how Marvin was built. In Chapter \ref{manual} it is described how to use Marvin in all its use cases, including installation.
+Diderot. This report is organized as follows: the Chapter \ref{system} describes the requirements, use cases, architecture and
+how Diderot was built. In Chapter \ref{manual} it is described how to use Diderot in all its use cases, including installation.
 Finally, in Chapter \ref{conclusion} we present concluding remarks and future goals for the project.
 
 \chapter{System Description}
 \label{system}
 
-This chapter will describe the goals defined for Marvin, a tool for Test Driven Development for building RDF/OWL ontologies
+This chapter will describe the goals defined for Diderot, a tool for Test Driven Development for building RDF/OWL ontologies
 and how the system was built, including use cases, architecture and the engineering process.
 
 \section{Goals}
 \label{goals}
 
-The main goals of Marvin is to provide a simple interface to test small portions of ontologies regarding:
+The main goals of Diderot is to provide a simple interface to test small portions of ontologies regarding:
 
 \begin{itemize}
     \item Expected inferences. The system must check if expected inferences are satisfied by the ontology
@@ -99,7 +99,7 @@ The main goals of Marvin is to provide a simple interface to test small portions
 \section{Requirements}
 \label{requirements}
 
-The requirements of Marvin follows:
+The requirements of Diderot follows:
 \begin{itemize}
     \item To provide facilities for testing ontologies regarding the goals mentioned in Section \ref{goals}: cheking
         expected and lack of unexpected inferences, self consistency and proper competency questions answering.
@@ -122,7 +122,7 @@ in Figure \ref{figUseCase}.
 \begin{figure}[!hbt]
     \centering
     \label{figUseCase}
-    \caption{Use case diagram for Marvin}
+    \caption{Use case diagram for Diderot}
     \includegraphics[scale=0.5]{fig/use_case_diagram.png}
 \end{figure}
 
@@ -151,11 +151,11 @@ so that ontology can fulfill its goal. The question can be asked as a SPARQL que
 
 \section{Architecture}
 
-Marvin architecture is summarized in Figure \ref{figArchitecture}.
+Diderot architecture is summarized in Figure \ref{figArchitecture}.
 The \texttt{case} module is the interface with our users (programmers).
-Users must extend \texttt{MarvinTestCase} (main class in \texttt{case} module) in their test cases to use Marvin.
-\texttt{MarvinTestCase}, in turn, extends \texttt{TestCase} (from \texttt{unittest}, the Python unit testing framework).
-In Marvin's test cases, assertions (in the \texttt{assertion} module) are used to check, for example, that expected facts can be inferred from the input ontology.
+Users must extend \texttt{DiderotTestCase} (main class in \texttt{case} module) in their test cases to use Diderot.
+\texttt{DiderotTestCase}, in turn, extends \texttt{TestCase} (from \texttt{unittest}, the Python unit testing framework).
+In Diderot's test cases, assertions (in the \texttt{assertion} module) are used to check, for example, that expected facts can be inferred from the input ontology.
 
 Finally, assertions use the \texttt{rules} modules to trigger inferences in \texttt{FuXi}, a inference machine written in Python.
 \texttt{Fuxi} uses rules that express RDF and OWL semantics to perform its inferences.
@@ -165,14 +165,14 @@ Finally, assertions use the \texttt{rules} modules to trigger inferences in \tex
 \begin{figure}[!hbt]
     \centering
     \label{figArchitecture}
-    \caption{Marvin architecture}
+    \caption{Diderot architecture}
     \includegraphics[scale=0.33]{fig/architecture.png}
 \end{figure}
 
 \section{Engineering Process}
 
-During the development of Marvin, the code (and this report) was hosted in Github
-\footnote{Available at \url{http://github.com/icaromedeiros/marvin}}, a social coding tool that enables free software
+During the development of Diderot, the code (and this report) was hosted in Github
+\footnote{Available at \url{http://github.com/icaromedeiros/diderot}}, a social coding tool that enables free software
 sharing. The Semantic Web community and all users are welcome to contribute to the project and give feedback.
 
 Within Github users can open issues, fork the project (create your own copy) and perform pull requests (patches to the
@@ -183,12 +183,12 @@ and \url{http://github.com/rails/rails}}.
 Git version control was used in the software development, as it is the
 default system used in Github and currently the most complete and popular version control system.
 
-An example of the Github page for the project is seen in Figure \ref{figGithub}. In the inferior part of the figure we can see a build status badge (on green), stating that the build is passing. This is another agile development tecnhique used in Marvin: Continuos Integration \cite{beck04}. Every change pushed into Marvin's repository on github triggers automatically a run on the automated tests (fully explained in Section \ref{tests}), using the Travis CI\footnote{Available at \url{http://www.travis-ci.org/}} tool.
+An example of the Github page for the project is seen in Figure \ref{figGithub}. In the inferior part of the figure we can see a build status badge (on green), stating that the build is passing. This is another agile development tecnhique used in Diderot: Continuos Integration \cite{beck04}. Every change pushed into Diderot's repository on github triggers automatically a run on the automated tests (fully explained in Section \ref{tests}), using the Travis CI\footnote{Available at \url{http://www.travis-ci.org/}} tool.
 
 \begin{figure}[!hbt]
     \centering
     \label{figGithub}
-    \caption{Github page of Marvin}
+    \caption{Github page of Diderot}
     \includegraphics[scale=0.4]{fig/github.png}
 \end{figure}
 
@@ -199,7 +199,7 @@ The tests are described next.
 \subsection{Tests}
 \label{tests}
 
-In the Test Driven Development used to create Marvin different kinds of tests were used, namely:
+In the Test Driven Development used to create Diderot different kinds of tests were used, namely:
 
 \begin{itemize}
     \item Unit tests. Testing only small portions of code make the software APIs better, clean code safe for changes.
@@ -208,18 +208,18 @@ In the Test Driven Development used to create Marvin different kinds of tests we
         functionalities, where nearly real data is often used.
         It is a black-box test as the internal program structure is mainly not considered.
     \item Acceptance tests. Test the software contract, i.e. if the requirements are fully satisfied. Mainly involve
-        user interface tests, but as Marvin is mainly a developer tool, our acceptance tests are unit tests for ontologies
+        user interface tests, but as Diderot is mainly a developer tool, our acceptance tests are unit tests for ontologies
         using our tool and real examples of ontologies that test our requirements (Section \ref{requirements}).
 \end{itemize}
 
 \subsubsection{Unit Tests}
 
-Currently, Marvin has XXX unit tests, covering 100\% of the code\footnote{Using coverage tool, available at \url{https://pypi.python.org/pypi/coverage}}.
+Currently, Diderot has XXX unit tests, covering 100\% of the code\footnote{Using coverage tool, available at \url{https://pypi.python.org/pypi/coverage}}.
 Not only all the lines are tested, but all code branches (e.g. all conditional flows).
 
 \subsubsection{Functional Tests}
 
-Currenly, Marvin has XXX functional tests, covering XX\% of the code.
+Currenly, Diderot has XXX functional tests, covering XX\% of the code.
 Functional tests cover broader functionalities such as asserting correct inference using different OWL capabilities.
 
 \subsubsection{Acceptance Tests}
@@ -232,11 +232,11 @@ These tests are also used in the user manual \cite{manual} as they present real 
 
 Software documentation is rather confuse and incomplete.
 A good documentation can make a real difference between low or high adopted software.
-Therefore, Marvin documentation is extensive and well designed.
+Therefore, Diderot documentation is extensive and well designed.
 
 \section{Documentation}
 
-The documentation is available online at \url{https://marvin.readthedocs.org}.
+The documentation is available online at \url{https://diderot.readthedocs.org}.
 Using sphinx tool\footnote{Available at \url{http://sphinx-doc.org/}}, it was created documentation using
 reStructuredText, a simple format to write documentation.
 Sphinx compile the \texttt{.rst} files into HTML files that create a browsable and very usable documentation.
@@ -249,17 +249,17 @@ This enables programmers to understand how the code works very fast.
 
 \section{Installation}
 
-To install Marvin, first users need to have Python 2.7 installed \footnote{Other Python versions were not tested. Instructions for installing Python in all platforms can be found in \url{www.python.org/download}}.
+To install Diderot, first users need to have Python 2.7 installed \footnote{Other Python versions were not tested. Instructions for installing Python in all platforms can be found in \url{www.python.org/download}}.
 Pip tool is also need for installed all the required libraries \footnote{Instruction for installing pip can be found here \url{http://www.pip-installer.org/en/latest/installing.html}}.
 It is recommended to use virtualenv tool \footnote{It is recommended to use virtualenv with virtualenvwrapper. Install these tool by using \texttt{pip install virtualenv} and \texttt{pip install virtualenvwrapper}.} to use different environments for Python projects.
 
-After this, simply type \texttt{pip install marvin} and all its dependencies in the selected virtualenv, as seen in Figure \ref{figInstalling}.
+After this, simply type \texttt{pip install diderot} and all its dependencies in the selected virtualenv, as seen in Figure \ref{figInstalling}.
 
 % TODO figure
 
-\subsection{Marvin dependencies}
+\subsection{Diderot dependencies}
 
-Marvin reuses some libraries to work, namely:
+Diderot reuses some libraries to work, namely:
 
 \begin{itemize}
     \item \texttt{rdflib==2.4.2}. Library for parsing RDF files into Python objects, different types of RDF serialization and other facilities for dealing with RDF data.
