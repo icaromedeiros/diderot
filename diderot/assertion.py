@@ -1,5 +1,5 @@
-from utils import parse_facts, is_triples_subset
-from rules import Inference
+from diderot.utils import parse_facts, is_triples_subset
+from diderot.inference import Inference
 
 
 def can_infer(expected_facts):
