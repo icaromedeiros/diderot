@@ -1,4 +1,5 @@
 from unittest import TestCase
+from mock import patch
 
 from marvin import MarvinTestCase
 from marvin.assertion import Assertion
@@ -6,15 +7,18 @@ from marvin.assertion import Assertion
 
 class MarvinTestCaseTestCase(TestCase):
 
-    def test_not_assertion_raises_exception(self):
+    @patch("marvin.case.MarvinTestCase.__init__", return_value=None)
+    def test_not_assertion_raises_exception(self, init):
         test_case = MarvinTestCase()
         self.assertRaises(RuntimeError, test_case.assertThat, 1 == 1)
 
-    def test_false_assertion(self):
+    @patch("marvin.case.MarvinTestCase.__init__", return_value=None)
+    def test_false_assertion(self, init):
         test_case = MarvinTestCase()
         self.assertRaises(AssertionError, test_case.assertThat, Assertion())
 
-    def test_true_assertion(self):
+    @patch("marvin.case.MarvinTestCase.__init__", return_value=None)
+    def test_true_assertion(self, init):
         assertion = Assertion()
         assertion.assertion_value = True
         test_case = MarvinTestCase()

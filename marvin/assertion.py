@@ -23,7 +23,7 @@ class Assertion(object):
         self.assertion_value = False
 
     def from_facts(self, facts):
-        self.facts = facts
+        self.facts = parse_facts(facts)
         self._infer()
         return self
 

@@ -18,7 +18,7 @@ functional: clean
 
 acceptance: clean
 	@echo "Running acceptance tests..."
-	@nosetests -s --with-coverage --cover-branches --cover-inclusive --cover-package=marvin --tests=tests/acceptance --with-xunit --with-spec --spec-color
+	@nosetests -s --tests=example/test --with-xunit --with-spec --spec-color
 
 pep8:
 	@echo "Checking source-code PEP8 compliance"

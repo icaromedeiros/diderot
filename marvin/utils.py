@@ -1,28 +1,53 @@
+import os
+import sys
+import traceback
+
 from urllib import urlopen
+from urlparse import urlparse, urljoin
 
 from rdflib import Graph, StringInputSource
 
 from marvin.OWL import OWLNS
 
+SUPPORTED_URL_SCHEMES = ("http", "https", "file")
+AVAILABLE_INPUT_FORMATS_MESSAGE = "Available formats: a string URI, a string file path," + \
+    "a string in N3/Turle format, or a rdflib.Graph object."
+
 
 def parse_facts(facts):
     if isinstance(facts, str):
+        url_string = facts
+        scheme = urlparse(url_string).scheme
+
+        if scheme:
+            if scheme not in SUPPORTED_URL_SCHEMES:
+                raise RuntimeError("URI scheme not recognized. Supported: {0}".format(SUPPORTED_URL_SCHEMES))
+            else:  # Assume it is a file path
+                url_string = urljoin(os.getcwd(), url_string)
+
         try:
-            url_content = urlopen(facts)
+            url_content = urlopen(url_string)
             facts = "".join(url_content.readlines())
             facts_graph = parse_ttl_string(facts)
-        except IOError:
+        except IOError:  # Assume it is a string in N3/Turle format
             try:
                 facts_graph = parse_ttl_string(facts)
-            except:
+            except Exception as e:
+                etype, value, tb = sys.exc_info()
+                error_msg = ''.join(traceback.format_exception(etype, value, tb))
                 facts_excerpt = facts[:30]
-                raise RuntimeError("Error parsing facts:\n  " + facts_excerpt)
+                PARSING_ERROR_MSG = "Error parsing facts.\n  {0}\n" +\
+                        "  Input: {1}\n  Exception: {2}".format(AVAILABLE_INPUT_FORMATS_MESSAGE,
+                                                                facts_excerpt, error_msg)
+                raise RuntimeError(PARSING_ERROR_MSG)
         return facts_graph
     elif isinstance(facts, Graph):
         return facts
     else:
-        RuntimeError("Not accepted facts input: Available: a string URI, " +
-                     "string with a Turle content or rdflib.Graph")
+        input_type = str(type(facts))
+        PARSING_ERROR_MSG = "Unaccepted input.\n  {0}\n  Input type: {1}".\
+            format(AVAILABLE_INPUT_FORMATS_MESSAGE, input_type)
+        RuntimeError(PARSING_ERROR_MSG)
 
 
 def parse_ttl_string(ttl_string):

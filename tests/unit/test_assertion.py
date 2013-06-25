@@ -7,7 +7,7 @@ from marvin import can_infer, OWL
 from marvin.utils import get_empty_graph
 
 
-class InferringExpectedFactsTestCase(TestCase):
+class InferringExpectedFactsUnitTestCase(TestCase):
 
     EXPECTED_FACTS = get_empty_graph()
     EXPECTED_FACTS.add((URIRef(":Icaro"), RDF.type, URIRef(":Mortal")))

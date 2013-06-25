@@ -5,7 +5,7 @@ from marvin import can_infer, OWL
 from marvin.utils import get_empty_graph
 
 
-class InferringExpectedFactsTestCase(TestCase):
+class InferringExpectedFactsFunctionalTestCase(TestCase):
 
     def test_subclass_assertion(self):
         facts = get_empty_graph()
