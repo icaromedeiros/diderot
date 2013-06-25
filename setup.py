@@ -1,11 +1,11 @@
 from setuptools import setup
 
 setup(
-    name='marvin',
+    name='diderot',
     version='0.1',
-    description='Marvin - Test Driven Development for RDF/OWL Ontologies',
-    long_description='Marvin - Test Driven Development for RDF/OWL Ontologies',
-    packages=['marvin'],
+    description='Diderot - Test Driven Development for RDF/OWL Ontologies',
+    long_description='Diderot - Test Driven Development for RDF/OWL Ontologies',
+    packages=['diderot'],
     author='Icaro Medeiros',
     author_email = 'icaro.medeiros@gmail.com',
     license = 'PSF',
