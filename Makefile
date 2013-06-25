@@ -6,15 +6,15 @@ clean:
 
 test: clean pep8 pep8_tests
 	@echo "Running pep8, unit and integration tests..."
-	@nosetests -s --with-coverage --cover-branches --cover-inclusive --cover-package=marvin --tests=tests --with-xunit --with-spec --spec-color --exclude=src/marvin/case.py
+	@nosetests -s --with-coverage --cover-branches --cover-inclusive --cover-package=diderot --tests=tests --with-xunit --with-spec --spec-color --exclude=src/marvin/case.py
 
 unit: clean
 	@echo "Running unit tests..."
-	@nosetests -s --with-coverage --cover-branches --cover-inclusive --cover-package=marvin --tests=tests/unit --with-xunit --with-spec --spec-color
+	@nosetests -s --with-coverage --cover-branches --cover-inclusive --cover-package=diderot --tests=tests/unit --with-xunit --with-spec --spec-color
 
 functional: clean
 	@echo "Running functional tests..."
-	@nosetests -s --with-coverage --cover-branches --cover-inclusive --cover-package=marvin --tests=tests/functional --with-xunit --with-spec --spec-color
+	@nosetests -s --with-coverage --cover-branches --cover-inclusive --cover-package=diderot --tests=tests/functional --with-xunit --with-spec --spec-color
 
 acceptance: clean
 	@echo "Running acceptance tests..."
@@ -22,7 +22,7 @@ acceptance: clean
 
 pep8:
 	@echo "Checking source-code PEP8 compliance"
-	@-pep8 marvin --ignore=E501,E126,E127,E128
+	@-pep8 diderot --ignore=E501,E126,E127,E128
 
 pep8_tests:
 	@echo "Checking tests code PEP8 compliance"

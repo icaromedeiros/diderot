@@ -4,8 +4,8 @@ from StringIO import StringIO
 
 from rdflib import RDF, URIRef
 
-from marvin import OWL
-from marvin.utils import parse_ttl_string, parse_ttl_file, get_empty_graph,\
+from diderot import OWL
+from diderot.utils import parse_ttl_string, parse_ttl_file, get_empty_graph,\
     parse_facts, is_triples_subset
 from tests.utils import graph_to_list_of_triples, add_example_namespace, EXAMPLE
 
@@ -33,7 +33,7 @@ class UtilsTestCase(TestCase):
         result = graph_to_list_of_triples(result)
         self.assertItemsEqual(result, expected_triples_list)
 
-    @patch("marvin.utils.parse_ttl_string")
+    @patch("diderot.utils.parse_ttl_string")
     def test_parse_ttl_file(self, parse_ttl_string):
         mocked_open = mock_open()
         mocked_open.return_value = StringIO(TTL_STRING)
@@ -41,7 +41,7 @@ class UtilsTestCase(TestCase):
             parse_ttl_file(mocked_open)
         parse_ttl_string.assert_called_with(TTL_STRING)
 
-    @patch("marvin.utils.parse_ttl_string")
+    @patch("diderot.utils.parse_ttl_string")
     def test_parse_ttl_file_with_begin(self, parse_ttl_string):
         EXPECTED_STRING = ":Human a owl:Class ."
         mocked_open = mock_open()
@@ -50,7 +50,7 @@ class UtilsTestCase(TestCase):
             parse_ttl_file(mocked_open, begin=6)
         parse_ttl_string.assert_called_with(EXPECTED_STRING)
 
-    @patch("marvin.utils.parse_ttl_string")
+    @patch("diderot.utils.parse_ttl_string")
     def test_parse_ttl_file_with_end(self, parse_ttl_string):
         EXPECTED_STRING = "@prefix : <http://example.onto/> .\n"
 
@@ -60,7 +60,7 @@ class UtilsTestCase(TestCase):
             parse_ttl_file(mocked_open, end=2)
         parse_ttl_string.assert_called_with(EXPECTED_STRING)
 
-    @patch("marvin.utils.parse_ttl_string")
+    @patch("diderot.utils.parse_ttl_string")
     def test_parse_ttl_file_with_begin_and_end(self, parse_ttl_string):
         EXPECTED_STRING = "@prefix : <http://example.onto/> .\n"
 
@@ -86,40 +86,40 @@ class UtilsTestCase(TestCase):
         subset_graph.add((URIRef(":Icaro"), RDF.type, URIRef(":Mortal")))
         self.assertTrue(is_triples_subset(subset_graph, larger_graph))
 
-    @patch("marvin.utils.parse_ttl_string")
+    @patch("diderot.utils.parse_ttl_string")
     def test_parse_facts_from_uri(self, parse_ttl_string):
         mocked_open = mock_open()
         mocked_open.return_value = StringIO(TTL_STRING)
-        with patch("marvin.utils.urlopen", mocked_open):
+        with patch("diderot.utils.urlopen", mocked_open):
             parse_facts("http://test")
             parse_ttl_string.assert_called_with(TTL_STRING)
 
-    @patch("marvin.utils.parse_ttl_string")
+    @patch("diderot.utils.parse_ttl_string")
     def test_parse_facts_from_uri_in_unavaiable_protocol(self, parse_ttl_string):
         self.assertRaises(RuntimeError, parse_facts, "ftp://test.com")
 
-    @patch("marvin.utils.parse_ttl_string")
+    @patch("diderot.utils.parse_ttl_string")
     def test_parse_facts_from_file_path(self, parse_ttl_string):
         mocked_open = mock_open()
         mocked_open.return_value = StringIO(TTL_STRING)
-        with patch("marvin.utils.urlopen", mocked_open):
+        with patch("diderot.utils.urlopen", mocked_open):
             parse_facts("db/test.n3")
             parse_ttl_string.assert_called_with(TTL_STRING)
 
-    @patch("marvin.utils.parse_ttl_string")
+    @patch("diderot.utils.parse_ttl_string")
     def test_parse_facts_from_string(self, parse_ttl_string):
         mocked_open = mock_open()
         mocked_open.side_effect = IOError
-        with patch("marvin.utils.urlopen", mocked_open):
+        with patch("diderot.utils.urlopen", mocked_open):
             parse_facts(TTL_STRING)
             parse_ttl_string.assert_called_with(TTL_STRING)
 
-    @patch("marvin.utils.parse_ttl_string", side_effect=RuntimeError)
+    @patch("diderot.utils.parse_ttl_string", side_effect=RuntimeError)
     def test_parse_facts_from_invalid_string(self, parse_ttl_string):
         INVALID_FACTS_STRING = "<rdf>INVALID</rdf>"
         mocked_open = mock_open()
         mocked_open.side_effect = IOError
-        with patch("marvin.utils.urlopen", mocked_open):
+        with patch("diderot.utils.urlopen", mocked_open):
             self.assertRaises(RuntimeError, parse_facts, INVALID_FACTS_STRING)
 
     def test_parse_facts_rdflib_graph(self):

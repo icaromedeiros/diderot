@@ -4,7 +4,7 @@ from FuXi.Rete.RuleStore import SetupRuleStore
 from FuXi.Horn.HornRules import HornFromN3
 from FuXi.Rete.Util import generateTokenSet
 
-from marvin.utils import get_empty_graph
+from diderot.utils import get_empty_graph
 
 
 warnings.filterwarnings("ignore")

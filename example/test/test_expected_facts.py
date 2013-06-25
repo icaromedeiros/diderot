@@ -1,7 +1,7 @@
-from marvin import MarvinTestCase, can_infer
+from diderot import DiderotTestCase, can_infer
 
 
-class ExpectedFactsTestCase(MarvinTestCase):
+class ExpectedFactsTestCase(DiderotTestCase):
 
     def test_check_expected_facts(self):
         EXPECTED_FACTS_FILE = "example/db/check_expected_facts/expected_facts.n3"

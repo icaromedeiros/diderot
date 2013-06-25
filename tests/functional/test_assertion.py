@@ -1,8 +1,8 @@
 from unittest import TestCase
 from rdflib import RDF, RDFS, URIRef
 
-from marvin import can_infer, OWL
-from marvin.utils import get_empty_graph
+from diderot import can_infer, OWL
+from diderot.utils import get_empty_graph
 
 
 class InferringExpectedFactsFunctionalTestCase(TestCase):

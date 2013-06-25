@@ -2,10 +2,10 @@ from assertion import Assertion
 from unittest import TestCase
 
 
-class MarvinTestCase(TestCase):
+class DiderotTestCase(TestCase):
 
     def __init__(self, *args, **kwargs):  # pragma: no cover
-        super(MarvinTestCase, self).__init__(*args, **kwargs)
+        super(DiderotTestCase, self).__init__(*args, **kwargs)
 
     def assertThat(self, assertion):
         if isinstance(assertion, Assertion):

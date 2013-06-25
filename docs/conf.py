@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Marvin documentation build configuration file, created by
+# Diderot documentation build configuration file, created by
 # sphinx-quickstart on Mon Jun 17 22:31:45 2013.
 #
 # This file is execfile()d with the current directory set to its containing dir.
@@ -42,7 +42,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Marvin'
+project = u'Diderot'
 copyright = u'2013, Icaro Medeiros'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -105,7 +105,7 @@ html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
 # documentation.
 html_theme_options = {
     # Navigation bar title. (Default: ``project`` value)
-    'navbar_title': "Marvin",
+    'navbar_title': "Diderot",
 
     # Global TOC depth for "site" navbar tab. (Default: 1)
     # Switching to -1 shows all levels.
@@ -202,7 +202,7 @@ html_static_path = ['_static']
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'Marvindoc'
+htmlhelp_basename = 'Diderotdoc'
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -221,7 +221,7 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'Marvin.tex', u'Marvin Documentation',
+  ('index', 'Diderot.tex', u'Diderot Documentation',
    u'Icaro Medeiros', 'manual'),
 ]
 
@@ -251,7 +251,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'marvin', u'Marvin Documentation',
+    ('index', 'Diderot', u'Diderot Documentation',
      [u'Icaro Medeiros'], 1)
 ]
 
@@ -265,8 +265,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'Marvin', u'Marvin Documentation',
-   u'Icaro Medeiros', 'Marvin', 'One line description of project.',
+  ('index', 'Diderot', u'Diderot Documentation',
+   u'Icaro Medeiros', 'Diderot', 'One line description of project.',
    'Miscellaneous'),
 ]
 
