@@ -18,9 +18,7 @@ A quick example
 Checking expected facts
 -----------------------
 
-Consider this example we can check if expected facts can be inferred from the ontology.
-
-Consider this simple ontology:
+In this example we can check if expected facts can be inferred from the ontology. Consider this simple ontology:
 
 ```
 :Human rdfs:subClassOf :Mortal .
@@ -51,3 +49,5 @@ class ExpectedFactsTestCase(DiderotTestCase):
         ONTOLOGY_FILE = "path/to/ontology.n3"
         self.assertThat(can_infer(EXPECTED_FACTS_FILE).from_facts(ONTOLOGY_FILE))
 ```
+
+More examples on: http://diderot.readthedocs.org
