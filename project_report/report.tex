@@ -157,7 +157,7 @@ Users must extend \texttt{DiderotTestCase} (main class in \texttt{case} module) 
 \texttt{DiderotTestCase}, in turn, extends \texttt{TestCase} (from \texttt{unittest}, the Python unit testing framework).
 In Diderot's test cases, assertions (in the \texttt{assertion} module) are used to check, for example, that expected facts can be inferred from the input ontology.
 
-Finally, assertions use the \texttt{rules} modules to trigger inferences in \texttt{FuXi}, a inference machine written in Python.
+Finally, assertions use the \texttt{inference} module to trigger inferences in \texttt{FuXi}, a inference machine written in Python.
 \texttt{Fuxi} uses rules that express RDF and OWL semantics to perform its inferences.
 
 \texttt{RDFLib} and the \texttt{utils} package are used through all the code to perform utilitary functions such as parsing of ontologies written in Turtle format for RDF, checking if a \texttt{RDFLib graph} object contains a subset of triples of another object and so on.
