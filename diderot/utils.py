@@ -11,7 +11,7 @@ from diderot.OWL import OWLNS
 
 SUPPORTED_URL_SCHEMES = ("http", "https", "file")
 AVAILABLE_INPUT_FORMATS_MESSAGE = "Available formats: a string URI, a string relative file path," + \
-    "a string in N3/Turle format, or a rdflib.Graph object."
+    " a string in N3/Turtle format, or a rdflib.Graph object."
 
 
 def parse_facts(facts):
@@ -27,19 +27,20 @@ def parse_facts(facts):
 
         try:
             url_content = urlopen(url_string)
-            facts = "".join(url_content.readlines())
-            facts_graph = parse_ttl_string(facts)
+            facts_string = "".join(url_content.readlines())
+            facts_graph = parse_ttl_string(facts_string)
         except IOError:  # Assume it is a string in N3/Turle format
             try:
                 facts_graph = parse_ttl_string(facts)
             except Exception as e:
-                etype, value, tb = sys.exc_info()
-                error_msg = ''.join(traceback.format_exception(etype, value, tb))
                 facts_excerpt = facts[:30]
-                PARSING_ERROR_MSG = "Error parsing facts.\n  {0}\n" +\
-                        "  Input: {1}\n  Exception: {2}".format(AVAILABLE_INPUT_FORMATS_MESSAGE,
-                                                                facts_excerpt, error_msg)
+                if len(facts) > 30:
+                    facts_excerpt += " ..."
+                PARSING_ERROR_MSG = "Error parsing facts.\n  {0}\n  Input: {1}\n  Exception: {2}".format(
+                    AVAILABLE_INPUT_FORMATS_MESSAGE, facts_excerpt, e.message)
                 raise RuntimeError(PARSING_ERROR_MSG)
+        if is_empty_graph(facts_graph):
+            raise RuntimeError("The graph has no triples.\n  Input {0}".format(facts))
         return facts_graph
     elif isinstance(facts, Graph):
         return facts
@@ -86,6 +87,7 @@ def get_empty_graph():
 
 
 def is_triples_subset(graph1, graph2):
+    is_subset = False
     for triple in graph1.triples((None, None, None)):
         if triple in graph2:
             is_subset = True
@@ -93,3 +95,11 @@ def is_triples_subset(graph1, graph2):
             is_subset = False
             break
     return is_subset
+
+
+def is_empty_graph(graph):
+    triples_generator = graph.triples((None, None, None))
+    if sum(1 for _ in triples_generator) == 0:
+        return True
+    else:
+        return False

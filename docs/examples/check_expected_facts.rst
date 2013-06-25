@@ -17,3 +17,8 @@ Moreover, as the domain and range of the property ``rdfs:subClassOf`` is ``rdfs:
 .. literalinclude :: ../../example/db/check_expected_facts/expected_facts.n3
     :language: n3
     :emphasize-lines: 4-6
+
+To test if the expected facts are indeed inferred by the given ontology we can implement this simple Python code:
+
+.. literalinclude :: ../../example/test/test_expected_facts.py
+    :lines: 1-9

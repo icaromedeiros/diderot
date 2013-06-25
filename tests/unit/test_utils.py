@@ -6,7 +6,7 @@ from rdflib import RDF, URIRef
 
 from diderot import OWL
 from diderot.utils import parse_ttl_string, parse_ttl_file, get_empty_graph,\
-    parse_facts, is_triples_subset
+    parse_facts, is_triples_subset, is_empty_graph
 from tests.utils import graph_to_list_of_triples, add_example_namespace, EXAMPLE
 
 
@@ -16,6 +16,10 @@ TTL_STRING = """@prefix : <http://example.onto/> .
 :Icaro a :Mortal .
 :Mortal a owl:Class .
 :Human a owl:Class ."""
+
+
+NON_EMPTY_GRAPH = get_empty_graph()
+NON_EMPTY_GRAPH.add((EXAMPLE.Icaro, RDF.type, EXAMPLE.Mortal))
 
 
 class UtilsTestCase(TestCase):
@@ -86,7 +90,7 @@ class UtilsTestCase(TestCase):
         subset_graph.add((URIRef(":Icaro"), RDF.type, URIRef(":Mortal")))
         self.assertTrue(is_triples_subset(subset_graph, larger_graph))
 
-    @patch("diderot.utils.parse_ttl_string")
+    @patch("diderot.utils.parse_ttl_string", return_value=NON_EMPTY_GRAPH)
     def test_parse_facts_from_uri(self, parse_ttl_string):
         mocked_open = mock_open()
         mocked_open.return_value = StringIO(TTL_STRING)
@@ -98,7 +102,7 @@ class UtilsTestCase(TestCase):
     def test_parse_facts_from_uri_in_unavaiable_protocol(self, parse_ttl_string):
         self.assertRaises(RuntimeError, parse_facts, "ftp://test.com")
 
-    @patch("diderot.utils.parse_ttl_string")
+    @patch("diderot.utils.parse_ttl_string", return_value=NON_EMPTY_GRAPH)
     def test_parse_facts_from_file_path(self, parse_ttl_string):
         mocked_open = mock_open()
         mocked_open.return_value = StringIO(TTL_STRING)
@@ -106,7 +110,7 @@ class UtilsTestCase(TestCase):
             parse_facts("db/test.n3")
             parse_ttl_string.assert_called_with(TTL_STRING)
 
-    @patch("diderot.utils.parse_ttl_string")
+    @patch("diderot.utils.parse_ttl_string", return_value=NON_EMPTY_GRAPH)
     def test_parse_facts_from_string(self, parse_ttl_string):
         mocked_open = mock_open()
         mocked_open.side_effect = IOError
@@ -128,3 +132,12 @@ class UtilsTestCase(TestCase):
 
     def test_parse_facts_invalid_type(self):
         self.assertRaises(RuntimeError, parse_facts(10))
+
+    def test_is_empty_graph(self):
+        graph = get_empty_graph()
+        self.assertTrue(is_empty_graph(graph))
+
+    def test_is_not_empty_graph(self):
+        graph = get_empty_graph()
+        graph.add((URIRef(":Icaro"), RDF.type, URIRef(":Mortal")))
+        self.assertFalse(is_empty_graph(graph))

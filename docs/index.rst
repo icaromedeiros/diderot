@@ -8,24 +8,32 @@ Welcome to Diderot's documentation!
 
 Diderot is a framework for Test Driven Development of RDF/OWL ontologies.
 
-Installation
+Learn how to build maintainable and flexible yet SOUND and COMPLETE ontologies using a test, refactor, and retest cycle.
 
-Examples:
+
+
+Installation
+------------
+
+To install Diderot one can simply...
+
+Examples
+--------
 
 .. toctree::
    :maxdepth: 2
 
    examples/check_expected_facts.rst
 
-Diderot API:
+Diderot API
+-----------
 
-
+If you want to refer to Diderot's 
 
 
 Indices and tables
-==================
+------------------
 
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-
