@@ -4,4 +4,4 @@ pep8==1.4.1
 mock==1.0.1
 nose-exclude==0.1.9
 pinocchio==0.3.1
-python-coverall==2.2.0
+python-coveralls==2.2.0
