@@ -1,4 +1,5 @@
 [![Build Status](https://secure.travis-ci.org/icaromedeiros/diderot.png)](http://travis-ci.org/icaromedeiros/diderot)
+[![Coverage Status](https://coveralls.io/repos/icaromedeiros/diderot/badge.png?branch=master)](https://coveralls.io/r/icaromedeiros/diderot?branch=master)
 
 Diderot is a framework for Test Driven Development of RDF/OWL ontologies.
 
