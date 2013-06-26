@@ -5,7 +5,6 @@ from unittest import TestCase
 class DiderotTestCase(TestCase):
     """
         Diderot's main class. To use our framework your tests cases should extend this class.
-        An example of usage is presented below.
 
         .. literalinclude :: ../../example/test/test_expected_facts.py
             :lines: 1-9

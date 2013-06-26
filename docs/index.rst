@@ -31,6 +31,13 @@ Diderot API
 If you want to refer to Diderot's API to extend it, here is the API documentation.
 
 .. toctree::
-   :maxdepth: 5
+   :maxdepth: 10
 
    api/api.rst
+
+Indices and tables
+------------------
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
