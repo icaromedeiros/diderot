@@ -5,3 +5,5 @@ python:
 install: make install
 # command to run tests, e.g. python setup.py test
 script:  make test
+after_success:
+  - coveralls
