@@ -1,3 +1,17 @@
+"""
+    Utility model to create ``OWL`` namespace, not
+    include in ``RDFlib`` 2.4.2, so that users can
+    refer to OWL constructs easily.
+
+    .. code-block:: python
+
+       from diderot import OWL
+       from diderot.utils import get_empty_graph
+
+       graph = get_empty_graph
+       graph.add((URIRef(":Mortal"), RDF.type, OWL.Class))
+"""
+
 from rdflib.Namespace import Namespace
 
 OWLNS = Namespace("http://www.w3.org/2002/07/owl#")

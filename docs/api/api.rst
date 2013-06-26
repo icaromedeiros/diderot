@@ -19,6 +19,7 @@ Here we document Diderot's programming interface
     :members:
 
     .. automethod:: __init__
+
 :mod:`inference` module
 -----------------------
 
@@ -29,3 +30,8 @@ Here we document Diderot's programming interface
     :members:
 
     .. automethod:: __init__
+
+:mod:`OWL` module
+-----------------
+
+.. automodule:: diderot.OWL
