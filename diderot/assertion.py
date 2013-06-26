@@ -56,6 +56,10 @@ class Assertion(object):
         return self
 
     def _infer(self):
+        """
+            Method that constructs a ``diderot.inference.Inference`` object
+            and trigger the inference.
+        """
         inference = Inference()
         inference.add_facts(self.facts)
         inferred_facts = inference.get_inferred_facts()

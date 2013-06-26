@@ -21,7 +21,7 @@ class DiderotTestCase(TestCase):
             Users should use this function instead of the usual ``assertEqual()`` or ``assertTrue()``
             from ``unittest.TestCase``.
 
-            ``Assertion`` objects can be created by using utilitary functions such as ``can_infer()``
+            ``Assertion`` objects can be created by using utilitary functions such as ``can_infer()``.
 
             If the passed object is not an ``Assertion``, a ``RuntimeError`` is raised.
         """

@@ -16,4 +16,16 @@ Here we document Diderot's programming interface
     :members: can_infer
 
 .. autoclass:: diderot.assertion.Assertion
-    :members: __init__, from_facts, _infer
+    :members:
+
+    .. automethod:: __init__
+:mod:`inference` module
+-----------------------
+
+.. automodule:: diderot.inference
+    :members: build_rdfs_owl_rules, RDFS_OWL_RULES
+
+.. autoclass:: diderot.inference.Inference
+    :members:
+
+    .. automethod:: __init__
