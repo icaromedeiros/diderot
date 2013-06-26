@@ -12,10 +12,9 @@ setup(
     author='Icaro Medeiros',
     author_email = 'icaro.medeiros@gmail.com',
     license = 'PSF',
-    url = 'http://github.com/icaromedeiros/marvin',
+    url = 'http://github.com/icaromedeiros/diderot',
     platforms = [ 'Python 2.6 and newer' ],
     install_requires=[
-        "ez_setup",  # Fuxi needs it for installation
-        "FuXi==1.4.production"
+        "FuXi==1.4.1.production"
     ]
 )
