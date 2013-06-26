@@ -158,8 +158,11 @@ pseudoxml:
 	@echo
 	@echo "Build finished. The pseudo-XML files are in $(BUILDDIR)/pseudoxml."
 
-run: install html
-	@open _build/html/index.html
+run: install html open
+	@echo
 
 install:
 	@pip install -r requirements_doc.txt
+	
+open:
+	@open _build/html/index.html

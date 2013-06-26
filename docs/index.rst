@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 Welcome to Diderot's documentation!
-==================================
+===================================
 
 Diderot is a framework for Test Driven Development of RDF/OWL ontologies.
 
@@ -23,17 +23,14 @@ Examples
 .. toctree::
    :maxdepth: 2
 
-   examples/check_expected_facts.rst
+   examples/examples.rst
 
 Diderot API
 -----------
 
-If you want to refer to Diderot's 
+If you want to refer to Diderot's API to extend it, here is the API documentation.
 
+.. toctree::
+   :maxdepth: 5
 
-Indices and tables
-------------------
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   api/api.rst
