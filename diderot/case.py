@@ -1,6 +1,8 @@
 from assertion import Assertion
 from unittest import TestCase
 
+from diderot.utils import get_empty_graph
+
 
 class DiderotTestCase(TestCase):
     """
@@ -27,6 +29,11 @@ class DiderotTestCase(TestCase):
         """
         if isinstance(assertion, Assertion):
             if not assertion.assertion_value:
-                raise AssertionError()  # enhance the message by type of inference expected
+                ASSERTION_ERROR_MESSAGE = "Could not infer some expected facts:\n  {0}"
+                not_inferred_graph = get_empty_graph()
+                for triple in assertion.not_inferred_facts:
+                    not_inferred_graph.add(triple)
+
+                raise AssertionError(ASSERTION_ERROR_MESSAGE.format(not_inferred_graph.serialize(format="nt")))
         else:
             raise RuntimeError("The assertThat method expects an Assertion instance")

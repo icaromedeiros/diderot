@@ -16,7 +16,7 @@ EMPTY_GRAPH_MESSAGE = "The graph has no triples"
 
 def parse_facts(facts, begin=None, end=None):
     """
-        Utility function to parse facts in multiple formats``.
+        Utility function to parse facts in multiple formats.
 
         Available formats for input: a string URI, a string relative file path,
         a string in ``N3/Turtle`` format, or a ``rdflib.Graph`` object.
@@ -131,10 +131,11 @@ def get_empty_graph():
     return graph
 
 
-def is_triples_subset(graph1, graph2):
+def difference(graph1, graph2):
     """
         Utility function that compares ``graph1`` and ``graph2``
-        to check if ``graph1`` is a subset of ``graph2``.
+        to return a graph that is the difference between
+        ``graph1`` and ``graph2``.
 
         If any parameter is ``None`` or if ``graph1`` is empty a
         ``RuntimeError`` is raised.
@@ -143,7 +144,7 @@ def is_triples_subset(graph1, graph2):
         raise RuntimeError("Given graphs should not be None")
     if is_empty_graph(graph1):
         raise RuntimeError("First graph must not be empty")
-    return Set(graph1).issubset(Set(graph2))
+    return set(graph1) - set(graph2)
 
 
 def is_empty_graph(graph):

@@ -1,4 +1,4 @@
-from diderot.utils import parse_facts, is_triples_subset
+from diderot.utils import parse_facts, difference
 from diderot.inference import Inference
 
 
@@ -38,6 +38,7 @@ class Assertion(object):
         self.expected_facts = expected_facts
         self.facts = facts
         self.assertion_value = False
+        self.not_inferred_facts = None
 
     def from_facts(self, facts):
         """
@@ -63,4 +64,8 @@ class Assertion(object):
         inference = Inference()
         inference.add_facts(self.facts)
         inferred_facts = inference.get_inferred_facts()
-        self.assertion_value = is_triples_subset(self.expected_facts, inferred_facts)
+        self.not_inferred_facts = difference(self.expected_facts, inferred_facts)
+        if not self.not_inferred_facts:
+            self.assertion_value = True
+        else:
+            self.assertion_value = False

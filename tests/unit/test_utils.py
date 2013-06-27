@@ -8,7 +8,7 @@ from rdflib import RDF, URIRef
 
 from diderot import OWL
 from diderot.utils import parse_ttl_string, parse_ttl_file, get_empty_graph,\
-    parse_facts, is_triples_subset, is_empty_graph
+    parse_facts, is_empty_graph, difference
 from tests.utils import graph_to_list_of_triples, add_example_namespace, EXAMPLE
 
 
@@ -85,7 +85,7 @@ class UtilsTestCase(TestCase):
     def test_parse_ttl_file_with_invalid_end_0(self):
         self.assertRaises(RuntimeError, parse_ttl_file, "file_path", end=0)
 
-    def test_is_triple_subset(self):
+    def test_difference(self):
         larger_graph = get_empty_graph()
         larger_graph.add((URIRef(":Icaro"), RDF.type, URIRef(":Mortal")))
         larger_graph.add((URIRef(":Mortal"), RDF.type, OWL.Class))
@@ -93,20 +93,40 @@ class UtilsTestCase(TestCase):
 
         subset_graph = get_empty_graph()
         subset_graph.add((URIRef(":Icaro"), RDF.type, URIRef(":Mortal")))
-        self.assertTrue(is_triples_subset(subset_graph, larger_graph))
+        self.assertTrue(is_empty_graph(difference(subset_graph, larger_graph)))
+
+    def test_difference_not_empty(self):
+        larger_graph = get_empty_graph()
+        larger_graph.add((URIRef(":Icaro"), RDF.type, URIRef(":Mortal")))
+        larger_graph.add((URIRef(":Mortal"), RDF.type, OWL.Class))
+        larger_graph.add((URIRef(":Human"), RDF.type, OWL.Class))
+
+        subset_graph = get_empty_graph()
+        subset_graph.add((URIRef(":Icaro"), RDF.type, URIRef(":Mortal")))
+        subset_graph.add((URIRef(":Icaro"), RDF.type, URIRef(":Student")))  # Not in larger_graph
+
+        difference_expected_graph = get_empty_graph()
+        difference_expected_graph.add((URIRef(":Icaro"), RDF.type, URIRef(":Student")))  # Not in larger_graph
+
+        difference_expected_graph_set = set(difference_expected_graph)
+
+        difference_result_graph_set = difference(subset_graph, larger_graph)
+
+        self.assertEqual(len(difference_result_graph_set), 1)
+        self.assertEqual(difference_expected_graph_set, difference_result_graph_set)
 
     def test_is_triple_subset_empty_subgraph(self):
         larger_graph = get_empty_graph()
         subset_graph = get_empty_graph()
-        self.assertRaises(RuntimeError, is_triples_subset, subset_graph, larger_graph)
+        self.assertRaises(RuntimeError, difference, subset_graph, larger_graph)
 
     def test_is_triple_subset_larger_graph_None(self):
         subset_graph = get_empty_graph()
-        self.assertRaises(RuntimeError, is_triples_subset, subset_graph, None)
+        self.assertRaises(RuntimeError, difference, subset_graph, None)
 
     def test_is_triple_subset_subset_graph_None(self):
         larger_graph = get_empty_graph()
-        self.assertRaises(RuntimeError, is_triples_subset, None, larger_graph)
+        self.assertRaises(RuntimeError, difference, None, larger_graph)
 
     @patch("diderot.utils.parse_ttl_string", return_value=NON_EMPTY_GRAPH)
     def test_parse_facts_from_uri(self, parse_ttl_string):
