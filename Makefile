@@ -6,6 +6,7 @@ clean:
 
 test: clean pep8 pep8_tests
 	@echo "Running pep8, unit and integration tests..."
+	@coverage erase
 	@nosetests -s --with-coverage --cover-branches --cover-inclusive --cover-package=diderot --tests=tests --with-xunit --with-spec --spec-color
 	@coverage report
 

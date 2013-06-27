@@ -31,6 +31,12 @@ Here we document Diderot's programming interface
 
     .. automethod:: __init__
 
+:mod:`utils` module
+-------------------
+
+.. automodule:: diderot.utils
+    :members:
+
 :mod:`OWL` module
 -----------------
 

@@ -29,7 +29,6 @@ def build_rdfs_owl_rules():
     return network
 
 
-
 #: This attribute is loaded on ``diderot`` import to build ``RDFS`` and
 #: ``OWL`` rules only one time.
 RDFS_OWL_RULES = build_rdfs_owl_rules()

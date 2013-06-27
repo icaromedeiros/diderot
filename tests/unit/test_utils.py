@@ -1,3 +1,5 @@
+import os
+
 from unittest import TestCase
 from mock import patch, mock_open
 from StringIO import StringIO
@@ -75,10 +77,13 @@ class UtilsTestCase(TestCase):
         parse_ttl_string.assert_called_with(EXPECTED_STRING)
 
     def test_parse_ttl_file_with_invalid_begin(self):
-        self.assertRaises(RuntimeError, parse_ttl_file, None, begin=0)
+        self.assertRaises(RuntimeError, parse_ttl_file, "file_path", begin=0)
 
-    def test_parse_ttl_file_with_invalid_begin_end_0(self):
-        self.assertRaises(RuntimeError, parse_ttl_file, None, end=0)
+    def test_parse_ttl_file_with_invalid_begin_as_string(self):
+        self.assertRaises(RuntimeError, parse_ttl_file, "file_path", begin="invalid")
+
+    def test_parse_ttl_file_with_invalid_end_0(self):
+        self.assertRaises(RuntimeError, parse_ttl_file, "file_path", end=0)
 
     def test_is_triple_subset(self):
         larger_graph = get_empty_graph()
@@ -89,6 +94,19 @@ class UtilsTestCase(TestCase):
         subset_graph = get_empty_graph()
         subset_graph.add((URIRef(":Icaro"), RDF.type, URIRef(":Mortal")))
         self.assertTrue(is_triples_subset(subset_graph, larger_graph))
+
+    def test_is_triple_subset_empty_subgraph(self):
+        larger_graph = get_empty_graph()
+        subset_graph = get_empty_graph()
+        self.assertRaises(RuntimeError, is_triples_subset, subset_graph, larger_graph)
+
+    def test_is_triple_subset_larger_graph_None(self):
+        subset_graph = get_empty_graph()
+        self.assertRaises(RuntimeError, is_triples_subset, subset_graph, None)
+
+    def test_is_triple_subset_subset_graph_None(self):
+        larger_graph = get_empty_graph()
+        self.assertRaises(RuntimeError, is_triples_subset, None, larger_graph)
 
     @patch("diderot.utils.parse_ttl_string", return_value=NON_EMPTY_GRAPH)
     def test_parse_facts_from_uri(self, parse_ttl_string):
@@ -102,13 +120,10 @@ class UtilsTestCase(TestCase):
     def test_parse_facts_from_uri_in_unavaiable_protocol(self, parse_ttl_string):
         self.assertRaises(RuntimeError, parse_facts, "ftp://test.com")
 
-    @patch("diderot.utils.parse_ttl_string", return_value=NON_EMPTY_GRAPH)
-    def test_parse_facts_from_file_path(self, parse_ttl_string):
-        mocked_open = mock_open()
-        mocked_open.return_value = StringIO(TTL_STRING)
-        with patch("diderot.utils.urlopen", mocked_open):
-            parse_facts("db/test.n3")
-            parse_ttl_string.assert_called_with(TTL_STRING)
+    @patch("diderot.utils.parse_ttl_file", return_value=NON_EMPTY_GRAPH)
+    def test_parse_facts_from_file_path(self, parse_ttl_file):
+        parse_facts("db/test.n3", begin=2, end=3)
+        parse_ttl_file.assert_called_with(os.getcwd() + "/db/test.n3", 2, 3)
 
     @patch("diderot.utils.parse_ttl_string", return_value=NON_EMPTY_GRAPH)
     def test_parse_facts_from_string(self, parse_ttl_string):
@@ -120,14 +135,26 @@ class UtilsTestCase(TestCase):
 
     @patch("diderot.utils.parse_ttl_string", side_effect=RuntimeError)
     def test_parse_facts_from_invalid_string(self, parse_ttl_string):
-        INVALID_FACTS_STRING = "<rdf>INVALID</rdf>"
+        INVALID_FACTS_STRING = "<rdf>THIS IS AN INVALID STRING. ONLY N3 IS ACCEPTED</rdf>"
         mocked_open = mock_open()
         mocked_open.side_effect = IOError
         with patch("diderot.utils.urlopen", mocked_open):
             self.assertRaises(RuntimeError, parse_facts, INVALID_FACTS_STRING)
 
+    def test_parse_facts_with_empty_graph_string(self):
+        EMPTY_GRAPH_TTL_STRING = """
+        @prefix : <http://example.onto/> .
+        @prefix owl: <http://www.w3.org/2002/07/owl#> .
+        """
+        self.assertRaises(RuntimeError, parse_facts, EMPTY_GRAPH_TTL_STRING)
+
+    def test_parse_facts_with_empty_rdflib_graph(self):
+        graph = get_empty_graph()
+        self.assertRaises(RuntimeError, parse_facts, graph)
+
     def test_parse_facts_rdflib_graph(self):
         graph = get_empty_graph()
+        graph.add((URIRef(":Icaro"), RDF.type, URIRef(":Mortal")))
         self.assertEqual(graph, parse_facts(graph))
 
     def test_parse_facts_invalid_type(self):

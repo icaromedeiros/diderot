@@ -5,7 +5,7 @@ EXAMPLE = Namespace("http://example.onto/")
 
 def graph_to_list_of_triples(graph):
     list_of_triples = []
-    for triple in graph.triples((None, None, None)):
+    for triple in graph:
         list_of_triples.append(triple)
     return list_of_triples
 
