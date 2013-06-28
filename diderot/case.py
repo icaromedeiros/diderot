@@ -29,7 +29,7 @@ class DiderotTestCase(TestCase):
         """
         if isinstance(assertion, Assertion):
             if not assertion.assertion_value:
-                ASSERTION_ERROR_MESSAGE = "Could not infer some expected facts:\n  {0}"
+                ASSERTION_ERROR_MESSAGE = "Could not infer some expected facts:\n\n  {0}"
                 not_inferred_graph = get_empty_graph()
                 for triple in assertion.not_inferred_facts:
                     not_inferred_graph.add(triple)
