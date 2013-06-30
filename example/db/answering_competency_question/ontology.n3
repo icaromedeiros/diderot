@@ -1,0 +1,18 @@
+@prefix example: <http://example.onto/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+example:Human rdfs:subClassOf example:Mortal .
+
+example:name a           owl:DatatypeProperty ;
+             rdfs:domain example:Human ;
+             rdfs:range  xsd:string .
+
+example:age a           owl:DatatypeProperty ;
+            rdfs:domain example:Human ;
+            rdfs:range  xsd:nonNegativeInteger .
+
+example:Icaro a            example:Human ;
+              example:name "Icaro" ;
+              example:age  26 .
