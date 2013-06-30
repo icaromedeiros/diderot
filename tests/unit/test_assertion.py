@@ -45,14 +45,34 @@ class AnsweringCompetencyQuestionsUnitTestCase(TestCase):
         with patch("diderot.assertion.parse_facts", return_value=mocked_graph):
             assertion = can_answer("ASK { ?s a ?o }").from_ontology("A_ONTOLOGY")
             self.assertTrue(assertion.assertion_value)
+            self.assertIsNone(assertion.assertion_error_message)
+
+    def test_result_to_ask_returns_false(self):
+        mocked_graph = MagicMock()
+        mocked_graph.query = MagicMock(return_value=SPARQLQueryResult(False))
+        with patch("diderot.assertion.parse_facts", return_value=mocked_graph):
+            assertion = can_answer("ASK { ?s a ?o }").from_ontology("A_ONTOLOGY")
+            self.assertFalse(assertion.assertion_value)
+            self.assertIsNotNone(assertion.assertion_error_message)
 
     def test_result_to_select_query(self):
+        mocked_graph = MagicMock()
+        query_result = ([("test")], None, None, None, None, None)
+        mocked_graph.query = MagicMock(return_value=SPARQLQueryResult(query_result))  # Non Empty result
+        with patch("diderot.assertion.parse_facts", return_value=mocked_graph):
+            assertion = can_answer("SELECT { ?s a ?o }").from_ontology("A_ONTOLOGY")
+            self.assertTrue(assertion.assertion_value)
+            self.assertIsNone(assertion.assertion_error_message)
+
+    def test_result_to_select_query_with_empty_results(self):
         mocked_graph = MagicMock()
         query_result = ([], None, None, None, None, None)
         mocked_graph.query = MagicMock(return_value=SPARQLQueryResult(query_result))  # Empty result
         with patch("diderot.assertion.parse_facts", return_value=mocked_graph):
             assertion = can_answer("SELECT { ?s a ?o }").from_ontology("A_ONTOLOGY")
             self.assertFalse(assertion.assertion_value)
+            self.assertIsNotNone(assertion.assertion_error_message)
+            # TODO match message
 
     def test_result_to_construct_query_raises_exception(self):
         mocked_graph = MagicMock()

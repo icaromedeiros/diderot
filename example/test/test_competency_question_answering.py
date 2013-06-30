@@ -13,6 +13,24 @@ class ExpectedFactsTestCase(DiderotTestCase):
         }
         """
         ONTOLOGY_FILE = "example/db/answering_competency_question/ontology.n3"
-        self.assertThat(can_answer("SELECT * WHERE {?s ?p ?o}").from_ontology(ONTOLOGY_FILE))
+        self.assertThat(can_answer(QUESTION).from_ontology(ONTOLOGY_FILE))
 
+    def test_check_can_answer_with_ask(self):
+        QUESTION = """
+        ASK {
+            ?human a <http://example.onto/Human> ;
+        }
+        """
+        ONTOLOGY_FILE = "example/db/answering_competency_question/ontology.n3"
+        self.assertThat(can_answer(QUESTION).from_ontology(ONTOLOGY_FILE))
 
+    # Just to see error messages
+
+    #def test_check_can_answer_with_ask_returns_false(self):
+    #    QUESTION = """
+    #    ASK {
+    #        ?god a <http://example.onto/God> ;
+    #    }
+    #    """
+    #    ONTOLOGY_FILE = "example/db/answering_competency_question/ontology.n3"
+    #    self.assertThat(can_answer(QUESTION).from_ontology(ONTOLOGY_FILE))

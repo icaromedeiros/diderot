@@ -127,6 +127,7 @@ class CompetencyQuestionAssertion(Assertion):
         self.question = question
         self.expected_answer = expected_answer
         self.ontology_graph = ontology_graph
+        self.query_result = None
         super(CompetencyQuestionAssertion, self).__init__()
 
     def from_ontology(self, ontology):
@@ -142,18 +143,27 @@ class CompetencyQuestionAssertion(Assertion):
 
         """
         ontology_graph = parse_facts(ontology)
-        query_result = ontology_graph.query(self.question)
-        if query_result.construct:
+        self.query_result = ontology_graph.query(self.question)
+        if self.query_result.construct:
             raise RuntimeError("Only SELECT or ASK queries are accepted")
 
-        if query_result.askAnswer:
-            self.assertion_value = query_result.askAnswer[0]
-        elif query_result.selected is not None:
-            self.assertion_value = len(query_result.selected) > 0
+        if self.query_result.askAnswer:
+            self.assertion_value = self.query_result.askAnswer[0]
+            if not self.assertion_value:
+                ASSERTION_ERROR_MESSAGE = "ASK query returned false.\n  Query: {0}"
+                self.assertion_error_message = ASSERTION_ERROR_MESSAGE.format(self.question)
+        elif self.query_result.selected is not None:
+            self.assertion_value = len(self.query_result.selected) > 0
+            if not self.assertion_value:
+                ASSERTION_ERROR_MESSAGE = "SELECT query result is empty.\n  Query: {0}"
+                self.assertion_error_message = ASSERTION_ERROR_MESSAGE.format(self.question)
         else:
-            raise RuntimeError("Unexpected exception parsing SPARQL query results:\n  {0}".format(query_result))
+            raise RuntimeError("Unexpected exception parsing SPARQL query results:\n  {0}".format(self.query_result))
 
         return self
 
     def with_answer(self, expected_answer):
-        self.assertion_value = False  # rollback assertion value from from_ontology
+        if not self.query_result.selected:
+            raise RuntimeError("Only SELECT queries are accepted to use with with_answer")
+
+        self.assertion_value = False  # rollback assertion value defined in from_ontology
