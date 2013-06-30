@@ -4,7 +4,7 @@ from diderot.inference import Inference
 
 def can_infer(expected_facts):
     """
-        Method that initiates the method chaining by constructing an ``Assertion`` object
+        Method that initiates the method chaining by constructing an ``InferenceAssertion`` object
         with the given expected facts.
 
         .. code-block:: python
@@ -24,6 +24,11 @@ class Assertion(object):
     """
 
     def __init__(self):
+        """
+            Initializes assertion_value as ``False`` and assertion_error_message as None.
+
+            These are the two parameters used in client classes, such as ``diderot.DiderotTestCase``.
+        """
         self.assertion_value = False
         self.assertion_error_message = None
 
@@ -93,3 +98,62 @@ class InferenceAssertion(Assertion):
             not_inferred_graph.add(triple)
 
         self.assertion_error_message = ASSERTION_ERROR_MESSAGE.format(not_inferred_graph.serialize(format="nt"))
+
+
+def can_answer(question):
+    """
+        Method that initiates the method chaining by constructing an ``CompetencyQuestionAssertion``
+        object with a ``SPARQL`` query.
+
+        .. code-block:: python
+
+           can_answer("SELECT * {}")
+
+        This function is in ``diderot.__init__``, so it can be imported simply with
+        ``from diderot import can_answer``.
+    """
+    return CompetencyQuestionAssertion(question)
+
+
+class CompetencyQuestionAssertion(Assertion):
+    """
+        Class that holds assertion values for competency question answering.
+    """
+
+    def __init__(self, question, expected_answer=None, ontology_graph=None):
+        """
+            Write something
+        """
+        self.question = question
+        self.expected_answer = expected_answer
+        self.ontology_graph = ontology_graph
+        super(CompetencyQuestionAssertion, self).__init__()
+
+    def from_ontology(self, ontology):
+        """
+            This function is part of the method chaining and receives the ontology as argument.
+
+             As part of the method chaining this function returns the object itself, after running the
+             inference process, which updates the ``self.assertion_value`` member.
+
+             .. code-block:: python
+
+                can_infer(":Icaro a :Mortal").from_facts(":Icaro a :Human . :Human rdfs:subClassOf :Mortal")
+
+        """
+        ontology_graph = parse_facts(ontology)
+        query_result = ontology_graph.query(self.question)
+        if query_result.construct:
+            raise RuntimeError("Only SELECT or ASK queries are accepted")
+
+        if query_result.askAnswer:
+            self.assertion_value = query_result.askAnswer[0]
+        elif query_result.selected is not None:
+            self.assertion_value = len(query_result.selected) > 0
+        else:
+            raise RuntimeError("Unexpected exception parsing SPARQL query results:\n  {0}".format(query_result))
+
+        return self
+
+    def with_answer(self, expected_answer):
+        self.assertion_value = False  # rollback assertion value from from_ontology

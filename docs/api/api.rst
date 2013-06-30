@@ -7,7 +7,7 @@ Here we document Diderot's programming interface
 ----------------------------
 
 .. autoclass:: diderot.DiderotTestCase
-    :members: assertThat
+    :members: assert_that
 
 :mod:`assertion` module
 -----------------------
@@ -19,6 +19,16 @@ Here we document Diderot's programming interface
     :members:
 
     .. automethod:: __init__
+
+.. autoclass:: diderot.assertion.InferenceAssertion
+   :members:
+
+   .. automethod:: __init__
+
+.. autoclass:: diderot.assertion.CompetencyQuestionAssertion
+   :members:
+
+   .. automethod:: __init__
 
 :mod:`inference` module
 -----------------------
