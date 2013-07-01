@@ -14,7 +14,7 @@ class DiderotTestCase(TestCase):
     def __init__(self, *args, **kwargs):  # pragma: no cover
         super(DiderotTestCase, self).__init__(*args, **kwargs)
 
-    def assertThat(self, assertion):
+    def assert_that(self, assertion):
         """
             Function that uses a assertion object (``marvin.assertion.Assertion``) to check if the test will pass or not.
 

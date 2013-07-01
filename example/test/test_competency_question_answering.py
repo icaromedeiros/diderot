@@ -13,7 +13,7 @@ class ExpectedFactsTestCase(DiderotTestCase):
         }
         """
         ONTOLOGY_FILE = "example/db/answering_competency_question/ontology.n3"
-        self.assertThat(can_answer(QUESTION).from_ontology(ONTOLOGY_FILE))
+        self.assert_that(can_answer(QUESTION).from_ontology(ONTOLOGY_FILE))
 
     def test_check_can_answer_with_ask(self):
         QUESTION = """
@@ -22,7 +22,7 @@ class ExpectedFactsTestCase(DiderotTestCase):
         }
         """
         ONTOLOGY_FILE = "example/db/answering_competency_question/ontology.n3"
-        self.assertThat(can_answer(QUESTION).from_ontology(ONTOLOGY_FILE))
+        self.assert_that(can_answer(QUESTION).from_ontology(ONTOLOGY_FILE))
 
     # Just to see error messages
 
@@ -33,4 +33,4 @@ class ExpectedFactsTestCase(DiderotTestCase):
     #    }
     #    """
     #    ONTOLOGY_FILE = "example/db/answering_competency_question/ontology.n3"
-    #    self.assertThat(can_answer(QUESTION).from_ontology(ONTOLOGY_FILE))
+    #    self.assert_that(can_answer(QUESTION).from_ontology(ONTOLOGY_FILE))
