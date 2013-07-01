@@ -25,6 +25,11 @@ If you want to clone `diderot repository`_ and run all the tests, first install 
 
    $ mkvirtualenv diderot
    $ make install
+
+For running functional and unit tests:
+
+.. code-block:: console
+
    $ make test
 
 For running only unit tests\:

@@ -8,7 +8,7 @@ Welcome to Diderot's documentation!
 
 Diderot is a framework for Test Driven Development of RDF/OWL ontologies.
 
-Learn how to build maintainable and flexible yet SOUND and COMPLETE ontologies using a test, refactor, and retest cycle.
+Learn how to build maintainable and flexible ontologies using a test, refactor, and retest cycle.
 
 
 

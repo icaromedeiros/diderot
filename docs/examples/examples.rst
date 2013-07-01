@@ -7,4 +7,4 @@ Here are the use examples of Diderot framework.
    :maxdepth: 2
 
    check_expected_facts.rst
-
+   answer_competency_question.rst
