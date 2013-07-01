@@ -10,8 +10,13 @@ The documentation is available at http://diderot.readthedocs.org
 Installing
 ==========
 
-To install Diderot one can simply...
+To install Diderot one can simply
 
+```zsh
+pip install diderot
+```
+
+More on installation [here](https://diderot.readthedocs.org/en/latest/installation.html).
 
 A quick example
 =================
@@ -51,4 +56,4 @@ class ExpectedFactsTestCase(DiderotTestCase):
         self.assertThat(can_infer(EXPECTED_FACTS_FILE).from_facts(ONTOLOGY_FILE))
 ```
 
-More examples on: http://diderot.readthedocs.org
+More examples and full API documentation on: http://diderot.readthedocs.org
