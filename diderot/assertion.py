@@ -209,9 +209,9 @@ class CompetencyQuestionAssertion(Assertion):
             raise RuntimeError("The with_answer() parameter should a list of non-empty tuples.")
 
         if not self.query_result:
-            ERROR_MESSAGE = "Query result is None. Have you called from_ontology() first?" + \
-                "The right order is can_answer().from_ontology().with_answer()." + \
-                "Also, only SELECT queries are accepted to use with the function with_answer()"
+            ERROR_MESSAGE = "Query result is None. Have you called from_ontology() first?\n" + \
+                "  The right order is can_answer().from_ontology().with_answer().\n" + \
+                "  Also, only SELECT queries are accepted to use with the function with_answer()"
             raise RuntimeError(ERROR_MESSAGE)
 
         self.assertion_value = False  # rollback assertion value defined in from_ontology
