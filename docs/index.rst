@@ -15,7 +15,16 @@ Learn how to build maintainable and flexible yet SOUND and COMPLETE ontologies u
 Installation
 ------------
 
-To install Diderot one can simply...
+To install Diderot one can simply
+
+.. code-block:: console
+
+   $ pip install diderot
+
+.. toctree::
+   :maxdepth: 2
+
+   installation.rst
 
 Examples
 --------
