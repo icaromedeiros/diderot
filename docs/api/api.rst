@@ -13,7 +13,7 @@ Here we document Diderot's programming interface
 -----------------------
 
 .. automodule:: diderot.assertion
-    :members: can_infer
+    :members: can_infer, can_answer
 
 .. autoclass:: diderot.assertion.Assertion
     :members:

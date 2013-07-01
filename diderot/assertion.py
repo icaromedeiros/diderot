@@ -107,7 +107,7 @@ def can_answer(question):
 
         .. code-block:: python
 
-           can_answer("SELECT * {}")
+           can_answer("SELECT ?human WHERE { ?human a <http://example.onto/Human> }")
 
         This function is in ``diderot.__init__``, so it can be imported simply with
         ``from diderot import can_answer``.
@@ -120,12 +120,11 @@ class CompetencyQuestionAssertion(Assertion):
         Class that holds assertion values for competency question answering.
     """
 
-    def __init__(self, question, expected_answer=None, ontology_graph=None):
+    def __init__(self, question, ontology_graph=None):
         """
             Write something
         """
         self.question = question
-        self.expected_answer = expected_answer
         self.ontology_graph = ontology_graph
         self.query_result = None
         super(CompetencyQuestionAssertion, self).__init__()
@@ -134,36 +133,77 @@ class CompetencyQuestionAssertion(Assertion):
         """
             This function is part of the method chaining and receives the ontology as argument.
 
-             As part of the method chaining this function returns the object itself, after running the
-             inference process, which updates the ``self.assertion_value`` member.
-
              .. code-block:: python
 
-                can_infer(":Icaro a :Mortal").from_facts(":Icaro a :Human . :Human rdfs:subClassOf :Mortal")
+                can_answer("SELECT * WHERE {?s ?p ?o}").from_ontology(":Icaro a :Human . :Human rdfs:subClassOf :Mortal")
 
+            If the query to the selected ontology returns ``True`` (for ``ASK`` queries)
+            or a non-empty result (for ``SELECT`` queries), ``self.assertion_value`` is set
+            to ``True``. Otherwise, ``self.assertion_value`` is set to ``False``.
+
+            If the query is not a ``ASK`` or ``SELECT`` query, a ``RuntimeError`` is raised.
+
+            As part of the method chaining this function returns the object itself.
         """
         ontology_graph = parse_facts(ontology)
-        self.query_result = ontology_graph.query(self.question)
-        if self.query_result.construct:
+        query_result = ontology_graph.query(self.question)
+        if query_result.construct:
             raise RuntimeError("Only SELECT or ASK queries are accepted")
 
-        if self.query_result.askAnswer:
-            self.assertion_value = self.query_result.askAnswer[0]
+        if query_result.askAnswer:
+            self.assertion_value = query_result.askAnswer[0]
             if not self.assertion_value:
                 ASSERTION_ERROR_MESSAGE = "ASK query returned false.\n  Query: {0}"
                 self.assertion_error_message = ASSERTION_ERROR_MESSAGE.format(self.question)
-        elif self.query_result.selected is not None:
-            self.assertion_value = len(self.query_result.selected) > 0
+        elif query_result.allVariables is not None:
+            self.assertion_value = len(query_result.selected) > 0
             if not self.assertion_value:
                 ASSERTION_ERROR_MESSAGE = "SELECT query result is empty.\n  Query: {0}"
                 self.assertion_error_message = ASSERTION_ERROR_MESSAGE.format(self.question)
+            else:
+                self.query_result = query_result
         else:
             raise RuntimeError("Unexpected exception parsing SPARQL query results:\n  {0}".format(self.query_result))
 
         return self
 
-    def with_answer(self, expected_answer):
-        if not self.query_result.selected:
-            raise RuntimeError("Only SELECT queries are accepted to use with with_answer")
+    def with_answer(self, expected_answers):
+        """
+            Matches the ``expected_answers`` given as parameter with the ``self.query_result``
+
+            A ``RuntimeError`` will be raised if:
+
+            * expected_answers is ``None`` or empty.
+
+            * expected_answers is not a list of tuples.
+
+            * ``self.query_result`` is ``None`` or empty. This will happen if ``with_answer()``
+            is called before ``from_ontology()`` or if a non-SELECT query is passed as question
+            to ``can_answer()``.
+        """
+        if not expected_answers:
+            raise RuntimeError("The with_answer() parameter should not be None or empty.")
+
+        if not (isinstance(expected_answers, list) and isinstance(expected_answers[0], tuple)):
+            raise RuntimeError("The with_answer() parameter should a list of non-empty tuples.")
+
+        if not self.query_result:
+            ERROR_MESSAGE = "Query result is None. Have you called from_ontology() first?" + \
+                "The right order is can_answer().from_ontology().with_answer()." + \
+                "Also, only SELECT queries are accepted to use with the function with_answer()"
+            raise RuntimeError(ERROR_MESSAGE)
 
         self.assertion_value = False  # rollback assertion value defined in from_ontology
+
+        result_bindings = self.query_result.selected
+        try:
+            result_bindings.should.be.equal(expected_answers)
+        except AssertionError as e:
+            self.assertion_value = False
+            ASSERTION_ERROR_MESSAGE = "Query result is different from expected answer" + \
+                e.message
+            self.assertion_error_message = ASSERTION_ERROR_MESSAGE
+        else:
+            self.assertion_value = True
+
+        return self

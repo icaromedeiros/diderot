@@ -1,6 +1,8 @@
 from unittest import TestCase
 from mock import patch, MagicMock
 
+import sure
+
 from rdflib import RDF, RDFS, URIRef
 from rdflib.sparql.QueryResult import SPARQLQueryResult
 
@@ -57,7 +59,8 @@ class AnsweringCompetencyQuestionsUnitTestCase(TestCase):
 
     def test_result_to_select_query(self):
         mocked_graph = MagicMock()
-        query_result = ([("test")], None, None, None, None, None)
+        # result,selectionF,allVars,orderBy,distinct,topUnion
+        query_result = ([("test")], None, ["?s"], None, None, None)
         mocked_graph.query = MagicMock(return_value=SPARQLQueryResult(query_result))  # Non Empty result
         with patch("diderot.assertion.parse_facts", return_value=mocked_graph):
             assertion = can_answer("SELECT { ?s a ?o }").from_ontology("A_ONTOLOGY")
@@ -66,13 +69,13 @@ class AnsweringCompetencyQuestionsUnitTestCase(TestCase):
 
     def test_result_to_select_query_with_empty_results(self):
         mocked_graph = MagicMock()
-        query_result = ([], None, None, None, None, None)
+        # result,selectionF,allVars,orderBy,distinct,topUnion
+        query_result = ([], None, ["?s"], None, None, None)
         mocked_graph.query = MagicMock(return_value=SPARQLQueryResult(query_result))  # Empty result
         with patch("diderot.assertion.parse_facts", return_value=mocked_graph):
             assertion = can_answer("SELECT { ?s a ?o }").from_ontology("A_ONTOLOGY")
             self.assertFalse(assertion.assertion_value)
             self.assertIsNotNone(assertion.assertion_error_message)
-            # TODO match message
 
     def test_result_to_construct_query_raises_exception(self):
         mocked_graph = MagicMock()
@@ -87,7 +90,7 @@ class AnsweringCompetencyQuestionsUnitTestCase(TestCase):
 
     def test_result_to_construct_unexpected_result_query_raises_exception(self):
         mocked_result = MagicMock()
-        mocked_result.construct, mocked_result.selected, mocked_result.askAnswer = (None, None, None)
+        mocked_result.construct, mocked_result.allVariables, mocked_result.askAnswer = (None, None, None)
         mocked_graph = MagicMock()
         mocked_graph.query = MagicMock(return_value=mocked_result)  # Graph object
         with patch("diderot.assertion.parse_facts", return_value=mocked_graph):
@@ -97,3 +100,61 @@ class AnsweringCompetencyQuestionsUnitTestCase(TestCase):
                 pass
             else:
                 self.fail("RuntimeError not raised")
+
+    def test_with_answer_raises_exception_for_empty_expected_answer(self):
+        try:
+            can_answer("A QUESTION").with_answer([])
+        except RuntimeError as e:
+            self.assertEqual("The with_answer() parameter should not be None or empty.", e.message)
+        else:
+            self.fail("RuntimeError not raised")
+
+    def test_with_answer_raises_exception_for_not_list_expected_answer(self):
+            try:
+                can_answer("A QUESTION").with_answer({"expected_answer": "invalid"})
+            except RuntimeError as e:
+                self.assertEqual("The with_answer() parameter should a list of non-empty tuples.", e.message)
+            else:
+                self.fail("RuntimeError not raised")
+
+    def test_with_answer_raises_exception_for_not_list_of_tuples_expected_answer(self):
+            try:
+                can_answer("A QUESTION").with_answer([{"expected_answer": "invalid"}])
+            except RuntimeError as e:
+                self.assertEqual("The with_answer() parameter should a list of non-empty tuples.", e.message)
+            else:
+                self.fail("RuntimeError not raised")
+
+    def test_with_answer_raises_exception_for_empty_query_result(self):
+        try:
+            can_answer("A QUESTION").with_answer([("test",)])  # Invalid order
+        except RuntimeError as e:
+            self.assertIn("Query result is None. Have you called from_ontology", e.message)
+        else:
+            self.fail("RuntimeError not raised")
+
+    def test_with_answer_with_non_select_query(self):
+        mocked_graph = MagicMock()
+        mocked_graph.query = MagicMock(return_value=SPARQLQueryResult(False))
+        with patch("diderot.assertion.parse_facts", return_value=mocked_graph):
+            try:
+                can_answer("ASK { ?s a ?o }").from_ontology("A_ONTOLOGY").with_answer([("test",)])
+            except RuntimeError as e:
+                self.assertIn("Query result is None. Have you called from_ontology() first?", e.message)
+
+    def test_with_answer_matches_query_result(self):
+        mocked_graph = MagicMock()
+        query_result = ([("test",)], None, ["?s"], None, None, None)
+        mocked_graph.query = MagicMock(return_value=SPARQLQueryResult(query_result))
+        with patch("diderot.assertion.parse_facts", return_value=mocked_graph):
+            assertion = can_answer("ASK { ?s a ?o }").from_ontology("A_ONTOLOGY").with_answer([("test",)])
+            self.assertTrue(assertion.assertion_value)
+
+    def test_with_answer_does_not_match_query_result(self):
+        mocked_graph = MagicMock()
+        query_result = ([("test",), ("not_expected_answer",)], None, ["?s"], None, None, None)
+        mocked_graph.query = MagicMock(return_value=SPARQLQueryResult(query_result))
+        with patch("diderot.assertion.parse_facts", return_value=mocked_graph):
+            assertion = can_answer("ASK { ?s a ?o }").from_ontology("A_ONTOLOGY").with_answer([("test",)])
+            self.assertFalse(assertion.assertion_value)
+            self.assertIn("Query result is different from expected answer", assertion.assertion_error_message)

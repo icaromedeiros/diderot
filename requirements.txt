@@ -1,1 +1,2 @@
 FuXi==1.4.production
+sure==1.2.2
