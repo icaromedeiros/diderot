@@ -1,5 +1,5 @@
 from diderot import DiderotTestCase, can_answer
-
+from rdflib import URIRef
 
 class ExpectedFactsTestCase(DiderotTestCase):
 
@@ -23,6 +23,21 @@ class ExpectedFactsTestCase(DiderotTestCase):
         """
         ONTOLOGY_FILE = "example/db/answering_competency_question/ontology.n3"
         self.assert_that(can_answer(QUESTION).from_ontology(ONTOLOGY_FILE))
+
+
+    def test_check_can_answer_with_answer(self):
+        QUESTION = """
+        SELECT ?human ?age ?name
+        WHERE {
+            ?human a                          <http://example.onto/Human> ;
+                   <http://example.onto/age>  ?age ;
+                   <http://example.onto/name> ?name .
+        }
+        """
+        EXPECTED_ANSWER = [(URIRef("http://example.onto/Icaro"), 26, "Icaro")]
+        ONTOLOGY_FILE = "example/db/answering_competency_question/ontology.n3"
+        self.assert_that(can_answer(QUESTION).from_ontology(ONTOLOGY_FILE).with_answer(EXPECTED_ANSWER))
+
 
     # Just to see error messages
 

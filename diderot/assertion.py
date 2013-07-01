@@ -1,6 +1,8 @@
 from diderot.utils import parse_facts, difference, get_empty_graph
 from diderot.inference import Inference
 
+import sure
+
 
 def can_infer(expected_facts):
     """
@@ -169,17 +171,36 @@ class CompetencyQuestionAssertion(Assertion):
 
     def with_answer(self, expected_answers):
         """
-            Matches the ``expected_answers`` given as parameter with the ``self.query_result``
+            Matches the ``expected_answers`` given as parameter with the ``self.query_result``.
+
+            Note: It is **required** that the expected_answers list of tuples is in the same order
+            of the variables passed in the ``SELECT`` query.
+
+            It is also **required** that references to URIs must be passed in ``expected_answers``
+            as a ``rdflib.URIRef``.
+
+            .. code-block:: python
+
+                question = \"\"\"
+                SELECT ?human ?age ?name
+                WHERE {
+                    ?human a                          <http://example.onto/Human> ;
+                           <http://example.onto/age>  ?age ;
+                           <http://example.onto/name> ?name .
+                }
+                \"\"\"
+                expected_answers = [(rdflib.URIRef("http://example.onto/Human"), "Icaro", 26)]
+                can_infer(QUESTION).from_ontology(ONTOLOGY).with_answer(expected_answers)
 
             A ``RuntimeError`` will be raised if:
 
-            * expected_answers is ``None`` or empty.
+            * ``expected_answers`` is ``None`` or empty.
 
-            * expected_answers is not a list of tuples.
+            * ``expected_answers`` is not a list of tuples.
 
-            * ``self.query_result`` is ``None`` or empty. This will happen if ``with_answer()``
-            is called before ``from_ontology()`` or if a non-SELECT query is passed as question
-            to ``can_answer()``.
+            * ``self.query_result`` is ``None`` or empty. This will happen if ``with_answer()`` is called before ``from_ontology()`` or if a non-SELECT query is passed as question to ``can_answer()``.
+
+
         """
         if not expected_answers:
             raise RuntimeError("The with_answer() parameter should not be None or empty.")
@@ -200,7 +221,7 @@ class CompetencyQuestionAssertion(Assertion):
             result_bindings.should.be.equal(expected_answers)
         except AssertionError as e:
             self.assertion_value = False
-            ASSERTION_ERROR_MESSAGE = "Query result is different from expected answer" + \
+            ASSERTION_ERROR_MESSAGE = "Query result is different from expected answer.\n  " + \
                 e.message
             self.assertion_error_message = ASSERTION_ERROR_MESSAGE
         else:
