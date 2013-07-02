@@ -17,7 +17,7 @@ We want to be sure that ``example:Icaro a example:Student`` cannot be inferred. 
 
 .. literalinclude :: ../../example/test/test_unexpected_facts.py
     :language: python
-    :lines: 1-9
+    :lines: 1-9, 18-23
 
 This is useful in a stage of ontology development that we have not added ``example:Student`` to the ontology yet but in the future it will exist, so this test will fail, or can be changed to use ``can_infer()`` instead of ``cannot_infer()``.
 

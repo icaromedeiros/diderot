@@ -624,12 +624,71 @@ Note that the query result returns a \code{rdflib.Literal} object, that is trans
 \chapter{Conclusion}
 \label{conclusion}
 
+In this report we presented Diderot, a Test Driven Development tool for developing ontologies in RDF/OWL.
+We expect the tool to help ontology developers to create better and well tested ontologies, in a desirable test, write, refactor cycle.
+
 \section{Future Work}
+
+As future work some desirable features were added to the issues page in Diderot's project on Gihtub\footnote{Available at \url{http://github.com/icaromedeiros/diderot/issues}}:
+
+\begin{itemize}
+
+    \item Issue \#1 (Competency question answering must also be run on a SPARQL endpoint) \\
+
+    Now we can only query RDFLib Graph objects. But in many environments only a SPARQL HTTP endpoint is available, such as in DBPedia.
+
+    Then, it is desirable to the able to connect to a SPARQL endpoint during tests. \\
+
+    \item Issue \#2 (Competency question answering must support type matchers) \\
+
+        Competency question answering might be given generic parameters that only check the type of the SPARQL query results, for example:
+
+        \begin{Verbatim}[commandchars=\\\{\}]
+
+        \PYG{n}{EXPECTED\PYGZus{}ANSWER} \PYG{o}{=} \PYG{p}{[}\PYG{p}{(}\PYG{n}{anyURI}\PYG{p}{(}\PYG{p}{)}\PYG{p}{,} \PYG{n}{anyInt}\PYG{p}{(}\PYG{p}{)}\PYG{p}{,} \PYG{n}{anyString}\PYG{p}{(}\PYG{p}{)}\PYG{p}{)}\PYG{p}{]}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{assert\PYGZus{}that}\PYG{p}{(}\PYG{n}{can\PYGZus{}answer}\PYG{p}{(}\PYG{n}{QUESTION}\PYG{p}{)}\PYG{o}{.}\PYG{n}{from\PYGZus{}ontology}\PYG{p}{(}\PYG{n}{ONTOLOGY\PYGZus{}FILE}\PYG{p}{)}\PYG{o}{.}\PYG{n}{with\PYGZus{}answer}\PYG{p}{(}\PYG{n}{EXPECTED\PYGZus{}ANSWER}\PYG{p}{)}\PYG{p}{)}
+        \end{Verbatim}
+
+        We should check if sure matchers such as the one presente below can be used.
+
+
+        \begin{Verbatim}[commandchars=\\\{\}]
+        \PYG{k+kn}{import} \PYG{n+nn}{sure}
+
+        \PYG{p}{(}\PYG{l+m+mi}{5}\PYG{p}{)}\PYG{o}{.}\PYG{n}{should}\PYG{o}{.}\PYG{n}{be}\PYG{o}{.}\PYG{n}{an}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}}\PYG{l+s}{int}\PYG{l+s}{\PYGZsq{}}\PYG{p}{)}
+        \end{Verbatim}
+
+        This is useful when ontology delopers do not know all data in the ontology. \\
+
+    \item Issue \#3 (Deal with FuXi errors on inconsistent ontologies) \\
+
+        A desirable feature would to check the ontologies for inconsistency.
+        This was not done because FuXi simply crash with inconsistent ontologies such as one where there is an instance of two disjoint classes. \\
+
+    \item Issue \#4 (Better explaining why the competency question could not be answered) \\
+
+            The \texttt{AssertionError} message should give more hint on how to evolve the ontology to answer the asked competency question, e.g. which predicates do not match.
+
+\end{itemize}
 
 \begin{appendices}
 \chapter{CD Content}
 
-The CD ...
+The CD contains all project-related files. 
+n the root there is this report in PDF and the directory "diderot" the same way it can be cloned form Github.
+
+\begin{itemize}
+    \item Makefile - Utility file to install required libraries \texttt{make install} or to run tests \texttt{make test}.
+    \item README.md - README file in Github Markdown syntax for formatting in Github page.
+    \item diderot/ - Directory with the code for Diderot.
+    \item docs/ - Directory with the Documentation for Diderot.
+    \item example/ - Directory with examples of how using Diderot, used in documentation and as acceptance tests.
+    \item project\_report/ - Directory with LateX code files for compiling this report.
+    \item requirements.txt - Required libraries file for running Diderot.
+    \item requirements\_test.txt - Required libraries file for running Diderot tests.
+    \item setup.py - File to setup Diderot (e.g. installing required libraries) when using pip.
+    \item tests/ - Directory with Diderot test source code.
+\end{itemize}
 
 \end{appendices}
 

@@ -1,6 +1,0 @@
-@prefix example: <http://example.onto/> .
-@prefix owl: <http://www.w3.org/2002/07/owl#> .
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-
-example:Human rdfs:subClassOf example:Mortal .
-example:Icaro a example:Human .
