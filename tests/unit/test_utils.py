@@ -8,7 +8,7 @@ from rdflib import RDF, URIRef
 
 from diderot import OWL
 from diderot.utils import parse_ttl_string, parse_ttl_file, get_empty_graph,\
-    parse_facts, is_empty_graph, difference
+    parse_facts, is_empty_graph, difference, intersection
 from tests.utils import graph_to_list_of_triples, add_example_namespace, EXAMPLE
 
 
@@ -115,16 +115,42 @@ class UtilsTestCase(TestCase):
         self.assertEqual(len(difference_result_graph_set), 1)
         self.assertEqual(difference_expected_graph_set, difference_result_graph_set)
 
-    def test_is_triple_subset_empty_subgraph(self):
+    def test_difference_empty_subgraph(self):
         larger_graph = get_empty_graph()
         subset_graph = get_empty_graph()
         self.assertRaises(RuntimeError, difference, subset_graph, larger_graph)
 
-    def test_is_triple_subset_larger_graph_None(self):
+    def test_difference_larger_graph_None(self):
         subset_graph = get_empty_graph()
         self.assertRaises(RuntimeError, difference, subset_graph, None)
 
-    def test_is_triple_subset_subset_graph_None(self):
+    def test_difference_subset_graph_None(self):
+        larger_graph = get_empty_graph()
+        self.assertRaises(RuntimeError, difference, None, larger_graph)
+
+    def test_intersection(self):
+        larger_graph = get_empty_graph()
+        larger_graph.add((URIRef(":Icaro"), RDF.type, URIRef(":Mortal")))
+        larger_graph.add((URIRef(":Mortal"), RDF.type, OWL.Class))
+        larger_graph.add((URIRef(":Human"), RDF.type, OWL.Class))
+
+        subset_graph = get_empty_graph()
+        subset_graph.add((URIRef(":Icaro"), RDF.type, URIRef(":Mortal")))
+
+        result = intersection(subset_graph, larger_graph)
+        expected = set(subset_graph)
+        self.assertEqual(result, expected)
+
+    def test_intersection_empty_graphs(self):
+        larger_graph = get_empty_graph()
+        subset_graph = get_empty_graph()
+        self.assertRaises(RuntimeError, intersection, subset_graph, larger_graph)
+
+    def test_intersection_larger_graph_None(self):
+        subset_graph = get_empty_graph()
+        self.assertRaises(RuntimeError, intersection, subset_graph, None)
+
+    def test_intersection_subset_graph_None(self):
         larger_graph = get_empty_graph()
         self.assertRaises(RuntimeError, difference, None, larger_graph)
 

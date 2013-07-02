@@ -1,4 +1,4 @@
-from diderot.utils import parse_facts, difference, get_empty_graph
+from diderot.utils import parse_facts, difference, get_empty_graph, intersection
 from diderot.inference import Inference
 
 import sure
@@ -18,6 +18,22 @@ def can_infer(expected_facts):
     """
     expected_facts = parse_facts(expected_facts)
     return InferenceAssertion(expected_facts=expected_facts)
+
+
+def cannot_infer(unexpected_facts):
+    """
+        Method that initiates the method chaining by constructing an ``UnexpectedInferenceAssertion``
+        object with the given unexpected facts.
+
+        .. code-block:: python
+
+           cannot_infer(":Icaro a :Student")
+
+        This function is in ``diderot.__init__``, so it can be imported simply with
+        ``from diderot import can_infer``.
+    """
+    unexpected_facts = parse_facts(unexpected_facts)
+    return UnexpectedInferenceAssertion(unexpected_facts=unexpected_facts)
 
 
 class Assertion(object):
@@ -100,6 +116,73 @@ class InferenceAssertion(Assertion):
             not_inferred_graph.add(triple)
 
         self.assertion_error_message = ASSERTION_ERROR_MESSAGE.format(not_inferred_graph.serialize(format="nt"))
+
+
+class UnexpectedInferenceAssertion(Assertion):
+    """
+        Class that holds inference assertion values, facts (``rdflib.Graph`` objects),
+        with known facts and unexpected inferred facts.
+
+        This class also triggers the inference, on ``inference`` module.
+    """
+
+    def __init__(self, unexpected_facts=None, facts=None):
+        """
+            The constructor for InferenceAssertion generally gets a ``expected_facts`` object as argument,
+            as this is the use in ``can_infer`` function.
+
+            Known facts (hereby called ``facts``) can be also passed.
+
+            ``self.assertion_value`` is initialized as ``False``.
+        """
+        self.unexpected_facts = unexpected_facts
+        self.facts = facts
+        self.unexpected_inferred_facts = None
+        super(UnexpectedInferenceAssertion, self).__init__()
+
+    def from_facts(self, facts):
+        """
+             This function is part of the method chaining and receives facts as argument,
+             so that the inference is triggered using ``self.unexpected_facts`` and ``facts``.
+
+             As part of the method chaining this function returns the object itself, after running the
+             inference process, which updates the ``self.assertion_value`` member.
+
+             .. code-block:: python
+
+                cannot_infer(":Icaro a :Student").from_facts(":Icaro a :Human . :Human rdfs:subClassOf :Mortal")
+        """
+        self.facts = parse_facts(facts)
+        self._infer()
+        return self
+
+    def _infer(self):
+        """
+            Method that constructs a ``diderot.inference.Inference`` object
+            and trigger the inference.
+        """
+        inference = Inference()
+        inference.add_facts(self.facts)
+        inferred_facts = inference.get_inferred_facts()
+        self.unexpected_inferred_facts = intersection(self.unexpected_facts, inferred_facts)
+        if self.unexpected_inferred_facts:
+            self.assertion_value = False
+            self._build_assertion_error_message()
+        else:
+            self.assertion_value = True
+
+    def _build_assertion_error_message(self):
+        """
+            Method that builds the AssertionError message.
+            All expected and not inferred facts are built in a ``RDFlib.Graphh``
+            object and then serialized in NT format.
+        """
+        ASSERTION_ERROR_MESSAGE = "Could infer some unexpected facts:\n\n  {0}"
+        unexpected_facts_graph = get_empty_graph()
+        for triple in self.unexpected_inferred_facts:
+            unexpected_facts_graph.add(triple)
+
+        self.assertion_error_message = ASSERTION_ERROR_MESSAGE.format(unexpected_facts_graph.serialize(format="nt"))
 
 
 def can_answer(question):

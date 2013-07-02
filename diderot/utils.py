@@ -147,6 +147,22 @@ def difference(graph1, graph2):
     return set(graph1) - set(graph2)
 
 
+def intersection(graph1, graph2):
+    """
+        Utility function that compares ``graph1`` and ``graph2``
+        to return a graph that is the intersection between
+        ``graph1`` and ``graph2``.
+
+        If any parameter is ``None`` or if ``graph1`` is empty a
+        ``RuntimeError`` is raised.
+    """
+    if graph1 is None or graph2 is None:
+        raise RuntimeError("Given graphs should not be None")
+    if is_empty_graph(graph1):
+        raise RuntimeError("First graph must not be empty")
+    return set(graph1).intersection(set(graph2))
+
+
 def is_empty_graph(graph):
     """
         Utility function to check if a given ``RDFlib.Graph``

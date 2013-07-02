@@ -6,7 +6,7 @@ import sure
 from rdflib import RDF, RDFS, URIRef
 from rdflib.sparql.QueryResult import SPARQLQueryResult
 
-from diderot import can_infer, can_answer, OWL
+from diderot import can_infer, can_answer, OWL, cannot_infer
 from diderot.utils import get_empty_graph
 
 
@@ -36,6 +36,37 @@ class InferringExpectedFactsUnitTestCase(TestCase):
         facts.add((URIRef(":Human"), RDFS.subClassOf, URIRef(":Mortal")))
 
         assertion = can_infer(self.EXPECTED_FACTS).from_facts(facts)
+        self.assertFalse(assertion.assertion_value)
+
+
+class InferringUnexpectedFactsUnitTestCase(TestCase):
+
+    UNEXPECTED_FACTS = get_empty_graph()
+    UNEXPECTED_FACTS.add((URIRef(":Icaro"), RDF.type, URIRef(":Student")))
+
+    @patch("diderot.assertion.Inference.__init__", return_value=None)
+    @patch("diderot.assertion.Inference.add_facts")
+    @patch("diderot.assertion.Inference.get_inferred_facts", return_value=UNEXPECTED_FACTS)
+    def test_subclass_assertion(self, get_inferred_facts, add_facts, inference_init):
+        facts = get_empty_graph()
+        facts.add((URIRef(":Human"), RDFS.subClassOf, URIRef(":Mortal")))
+        facts.add((URIRef(":Icaro"), RDF.type, URIRef(":Human")))
+
+        assertion = cannot_infer(self.UNEXPECTED_FACTS).from_facts(facts)
+        self.assertTrue(assertion.assertion_value)
+
+    UNEXPECTED_FACTS = get_empty_graph()
+    UNEXPECTED_FACTS.add((URIRef(":Icaro"), RDF.type, URIRef(":Mortal")))
+
+    @patch("diderot.assertion.Inference.__init__", return_value=None)
+    @patch("diderot.assertion.Inference.add_facts")
+    @patch("diderot.assertion.Inference.get_inferred_facts", return_value=UNEXPECTED_FACTS)
+    def test_subclass_assertion_is_false(self, get_inferred_facts, add_facts, inference_init):
+        facts = get_empty_graph()
+        facts.add((URIRef(":Icaro"), RDF.type, URIRef(":Human")))
+        facts.add((URIRef(":Human"), RDFS.subClassOf, URIRef(":Mortal")))
+
+        assertion = cannot_infer(self.UNEXPECTED_FACTS).from_facts(facts)
         self.assertFalse(assertion.assertion_value)
 
 

@@ -19,6 +19,7 @@ Moreover, as the domain and range of the property ``rdfs:subClassOf`` is ``rdfs:
 To test if the expected facts are indeed inferred by the given ontology we can implement this simple Python code:
 
 .. literalinclude :: ../../example/test/test_expected_facts.py
+    :language: python
     :lines: 1-9
 
 Now consider that we add the triple ``example:Icaro a example:Student`` to the expected facts file.

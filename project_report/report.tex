@@ -370,6 +370,7 @@ Diderot reuses some libraries to work, namely:
 In this section we describe how to use Diderot, corresponding to the use cases presented in Section \ref{useCases}.
 
 \subsection{Checking Expected Inferences}
+\label{checkingExpected}
 
 In this example we can check if expected facts can be inferred from the ontology.
 
@@ -403,7 +404,6 @@ To test if the expected facts are indeed inferred by the given ontology we can i
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{k+kn}{from} \PYG{n+nn}{diderot} \PYG{k+kn}{import} \PYG{n}{DiderotTestCase}\PYG{p}{,} \PYG{n}{can\PYGZus{}infer}
 
-
 \PYG{k}{class} \PYG{n+nc}{ExpectedFactsTestCase}\PYG{p}{(}\PYG{n}{DiderotTestCase}\PYG{p}{)}\PYG{p}{:}
 
     \PYG{k}{def} \PYG{n+nf}{test\PYGZus{}check\PYGZus{}expected\PYGZus{}facts}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{)}\PYG{p}{:}
@@ -431,6 +431,63 @@ Then, when running the tests, an \code{AssertionError} will be raised with the e
 \PYG{g+go}{  \PYGZlt{}http://example.onto/Icaro\PYGZgt{} \PYGZlt{}http://www.w3.org/1999/02/22\PYGZhy{}rdf\PYGZhy{}syntax\PYGZhy{}ns\PYGZsh{}type\PYGZgt{} }
 \PYG{g+go}{     \PYGZlt{}http://example.onto/Student\PYGZgt{}.}
 \end{Verbatim}
+
+
+\subsection{Checking unexpected inferred facts}
+
+In this example we can check if unexpected inferred facts cannot be inferred from the ontology.
+
+Consider this simple ontology (the same one used in Section \ref{checkingExpected}):
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{@prefix }\PYG{n+nv}{example: }\PYG{n+nn}{\PYGZlt{}http://example.onto/\PYGZgt{} .}
+\PYG{k}{@prefix }\PYG{n+nv}{owl: }\PYG{n+nn}{\PYGZlt{}http://www.w3.org/2002/07/owl\PYGZsh{}\PYGZgt{} .}
+\PYG{k}{@prefix }\PYG{n+nv}{rdfs: }\PYG{n+nn}{\PYGZlt{}http://www.w3.org/2000/01/rdf\PYGZhy{}schema\PYGZsh{}\PYGZgt{} .}
+
+\PYG{n+nc}{example:Human }\PYG{o}{rdfs:subClassOf }\PYG{n+na}{e}\PYG{n+na}{x}\PYG{n+na}{a}\PYG{n+na}{m}\PYG{n+na}{p}\PYG{n+na}{l}\PYG{n+na}{e}\PYG{n+na}{:}\PYG{n+na}{M}\PYG{n+na}{o}\PYG{n+na}{r}\PYG{n+na}{t}\PYG{n+na}{a}\PYG{n+na}{l }.
+\PYG{n+nc}{example:Icaro }\PYG{o}{a }\PYG{n+na}{e}\PYG{n+na}{x}\PYG{n+na}{a}\PYG{n+na}{m}\PYG{n+na}{p}\PYG{n+na}{l}\PYG{n+na}{e}\PYG{n+na}{:}\PYG{n+na}{H}\PYG{n+na}{u}\PYG{n+na}{m}\PYG{n+na}{a}\PYG{n+na}{n }.
+\end{Verbatim}
+
+It says that \code{Human} is a sub class of \code{Mortal}, and that \code{Icaro} is a human.
+From this one can simply infer that \code{Icaro} is mortal.
+
+Moreover, as the domain and range of the property \code{rdfs:subClassOf} is \code{rdfs:Class} and \code{owl:Class} is sub class of \code{rdfs:Class}, both \code{Mortal} and \code{Human} are instances of \code{owl:Class}.
+
+We want to be sure that \code{example:Icaro a example:Student} cannot be inferred. We use the code below:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{from} \PYG{n+nn}{diderot} \PYG{k+kn}{import} \PYG{n}{DiderotTestCase}\PYG{p}{,} \PYG{n}{cannot\PYGZus{}infer}
+
+
+\PYG{k}{class} \PYG{n+nc}{ExpectedFactsTestCase}\PYG{p}{(}\PYG{n}{DiderotTestCase}\PYG{p}{)}\PYG{p}{:}
+
+    \PYG{k}{def} \PYG{n+nf}{test\PYGZus{}check\PYGZus{}unexpected\PYGZus{}facts}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n}{UNEXPECTED\PYGZus{}FACTS} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{\PYGZlt{}http://example.onto/Icaro\PYGZgt{} a \PYGZlt{}http://example.onto/Student\PYGZgt{} .}\PYG{l+s}{\PYGZdq{}}
+        \PYG{n}{ONTOLOGY\PYGZus{}FILE} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{example/db/check\PYGZus{}expected\PYGZus{}facts/ontology.n3}\PYG{l+s}{\PYGZdq{}}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{assert\PYGZus{}that}\PYG{p}{(}\PYG{n}{cannot\PYGZus{}infer}\PYG{p}{(}\PYG{n}{UNEXPECTED\PYGZus{}FACTS}\PYG{p}{)}\PYG{o}{.}\PYG{n}{from\PYGZus{}facts}\PYG{p}{(}\PYG{n}{ONTOLOGY\PYGZus{}FILE}\PYG{p}{)}\PYG{p}{)}
+\end{Verbatim}
+
+This is useful in a stage of ontology development that we have not added \code{example:Student} to the ontology yet but in the future it will exist, so this test will fail, or can be changed to use \code{can\_infer()} instead of \code{cannot\_infer()}.
+
+Now we want to see the test fail adding a fact we know it can be inferred, such as \code{example:Icaro a example:Mortal}.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{}} make \PYG{n+nb}{test}
+\PYG{g+go}{======================================================================}
+\PYG{g+go}{FAIL: test\PYGZus{}check\PYGZus{}unexpected\PYGZus{}facts\PYGZus{}fail (test.test\PYGZus{}unexpected\PYGZus{}facts.ExpectedFactsTestCase)}
+\PYG{g+go}{\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{g+go}{Traceback (most recent call last):}
+\PYG{g+go}{  File \PYGZdq{}/path/test\PYGZus{}unexpected\PYGZus{}facts.py\PYGZdq{}, line 16, in test\PYGZus{}check\PYGZus{}unexpected\PYGZus{}facts\PYGZus{}fail}
+\PYG{g+go}{    self.assert\PYGZus{}that(cannot\PYGZus{}infer(UNEXPECTED\PYGZus{}FACTS).from\PYGZus{}facts(ONTOLOGY\PYGZus{}FILE))}
+\PYG{g+go}{  File \PYGZdq{}/path/diderot/case.py\PYGZdq{}, line 30, in assert\PYGZus{}that}
+\PYG{g+go}{    raise AssertionError(assertion.assertion\PYGZus{}error\PYGZus{}message)}
+\PYG{g+go}{AssertionError: Could infer some unexpected facts:}
+
+\PYG{g+go}{  \PYGZlt{}http://example.onto/Icaro\PYGZgt{} \PYGZlt{}http://www.w3.org/1999/02/22\PYGZhy{}rdf\PYGZhy{}syntax\PYGZhy{}ns\PYGZsh{}type\PYGZgt{}}
+\PYG{g+go}{     \PYGZlt{}http://example.onto/Mortal\PYGZgt{}.}
+\PYG{g+go}{\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\end{Verbatim}
+
 
 
 \subsection{Check Answering to Competency Question}
@@ -563,9 +620,6 @@ If expected answers and query results are not equal, the test will fail:
 \end{Verbatim}
 
 Note that the query result returns a \code{rdflib.Literal} object, that is transformed to a python primitive type (such as \code{int} or \code{string}) when trying to compare with expected answers if it is not a URI reference.
-
-
-
 
 \chapter{Conclusion}
 \label{conclusion}
