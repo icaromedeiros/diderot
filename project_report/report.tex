@@ -36,7 +36,7 @@ test-write-refactor cycle.
 TDD is a safe methodology to develop programs, where we can be sure that changes do not
 introduce bugs or unexpected behavior by running our automated tests for our code. Moreover,
 by doing tests first, we can check our architecture decisions simply by being clients of our own code
-in our tests. Finally (?), the tests can be seen as a documentation about the code.
+in our tests. And finally the tests can also be seen as a documentation about the code.
 
 Almost all modern programming languages have unit test frameworks that enable to run
 automated tests for your code and engage into a TDD process for software, such as the xUnit
@@ -65,14 +65,12 @@ derived and be aware of unexpected inferred conclusions.
 Moreover, competency questions, as defined by some methodologies for Ontology Engineering like Methontology \cite{lopez99},
 describe what kind of knowledge the resulting ontology is supposed to answer. These questions can always be formalized in
 a query language (like SPARQL). By formalizing the queries and the expected answers, a system can automatically checks if
-the ontology meets the requirements stated with the competency questions.
+the ontology meets the requirements stated in the competency questions.
 
-% TODO example
-
-To answer these needs in this report is proposed a novel Test Driven Development tool for building RDF/OWL ontologies, called
+To answer these needs in this report a novel Test Driven Development tool for building RDF/OWL ontologies is proposed, called
 Diderot. This report is organized as follows: the Chapter \ref{system} describes the requirements, use cases, architecture and
-how Diderot was built. In Chapter \ref{manual} it is described how to use Diderot in all its use cases, including installation.
-Finally, in Chapter \ref{conclusion} we present concluding remarks and future goals for the project.
+how Diderot was built. In Chapter \ref{manual} it is described how to use Diderot in all its use cases, including installation and
+documentation. Finally, in Chapter \ref{conclusion} we present concluding remarks and future goals for the project.
 
 \chapter{System Description}
 \label{system}
@@ -90,8 +88,6 @@ The main goals of Diderot is to provide a simple interface to test small portion
         given as input.
     \item Check for lack of unexpected inferences. The system must guarantee that no unexpected inferences are
         derived from the target ontology.
-    \item Self consistency check. The system must check if rules stated in the ontology do not
-        contradict each other thus leading to guaranteed ontology consistency.
     \item Answering competency questions. The system must check if answers to competency questions are
         the same as users expect, given the target ontologies and the knowledge base which uses the ontology.
 \end{itemize}
@@ -123,7 +119,7 @@ in Figure \ref{figUseCase}.
     \centering
     \label{figUseCase}
     \caption{Use case diagram for Diderot}
-    \includegraphics[scale=0.5]{fig/use_case_diagram.png}
+    \includegraphics[scale=0.75]{fig/use_case_diagram.png}
 \end{figure}
 
 Following, the use cases will be described as user stories \cite{beck04}.
@@ -137,12 +133,7 @@ functional inferences.
 \subsubsection{Check for lack of Unexpected Inference}
 
 As a ontology developer, I want to check for lack of unexpected inferences so that unwanted facts
-derived from the ontology do no harm ontology consistency or its uses.
-
-\subsubsection{Check Ontology Self Consistency}
-
-As a ontology developer, I want to check ontology for self consistency so that inferences are able to
-function properly.
+derived from the ontology do no harm ontology uses.
 
 \subsubsection{Check Answering to Competency Question}
 
@@ -160,7 +151,7 @@ In Diderot's test cases, assertions (in the \texttt{assertion} module) are used 
 Finally, assertions use the \texttt{inference} module to trigger inferences in \texttt{FuXi}, a inference machine written in Python.
 \texttt{Fuxi} uses rules that express RDF and OWL semantics to perform its inferences.
 
-\texttt{RDFLib} and the \texttt{utils} package are used through all the code to perform utilitary functions such as parsing of ontologies written in Turtle format for RDF, checking if a \texttt{RDFLib graph} object contains a subset of triples of another object and so on.
+\texttt{RDFLib} and the \texttt{utils} package are used through all the code to perform utilitary functions such as parsing of ontologies written in Turtle format for RDF, checking if a \texttt{RDFLib graph} object contains a subset of triples of another object, performing SPARQL queries in memory and so on.
 
 \begin{figure}[!hbt]
     \centering
@@ -183,14 +174,7 @@ and \url{http://github.com/rails/rails}}.
 Git version control was used in the software development, as it is the
 default system used in Github and currently the most complete and popular version control system.
 
-An example of the Github page for the project is seen in Figure \ref{figGithub}. In the inferior part of the figure we can see a build status badge (on green), stating that the build is passing. This is another agile development tecnhique used in Diderot: Continuos Integration \cite{beck04}. Every change pushed into Diderot's repository on github triggers automatically a run on the automated tests (fully explained in Section \ref{tests}), using the Travis CI\footnote{Available at \url{http://www.travis-ci.org/}} tool.
-
-\begin{figure}[!hbt]
-    \centering
-    \label{figGithub}
-    \caption{Github page of Diderot}
-    \includegraphics[scale=0.4]{fig/github.png}
-\end{figure}
+We have also connected the Github project to a Continuous Integration tool\cite{beck04}. Every change pushed into Diderot's repository on github triggers automatically a run on the automated tests (fully explained in Section \ref{tests}), using the Travis CI\footnote{Available at \url{http://www.travis-ci.org/}} tool. A badge in Diderot's README file on Github presents if the build is passing or not.
 
 As a software development methodology the Extreme Programming \cite{beck04} was chosen, with a focus on Test Driven
 Development. It would be rather contradictory to build a TDD tool without using the methodology in its own development.
@@ -214,13 +198,12 @@ In the Test Driven Development used to create Diderot different kinds of tests w
 
 \subsubsection{Unit Tests}
 
-Currently, Diderot has XXX unit tests, covering 100\% of the code\footnote{Using coverage tool, available at \url{https://pypi.python.org/pypi/coverage}}.
+Currently, Diderot has 42 unit tests, covering 100\% of the code\footnote{Coverage percentage is extracted using coverage tool, available at \url{https://pypi.python.org/pypi/coverage}}.
 Not only all the lines are tested, but all code branches (e.g. all conditional flows).
 
 \subsubsection{Functional Tests}
 
-Currenly, Diderot has XXX functional tests, covering XX\% of the code.
-Functional tests cover broader functionalities such as asserting correct inference using different OWL capabilities.
+Currenly, Diderot has 8 functional tests, covering broader functionalities such as asserting correct inference using different OWL capabilities.
 
 \subsubsection{Acceptance Tests}
 
@@ -240,6 +223,22 @@ The documentation is available online at \url{https://diderot.readthedocs.org}.
 Using sphinx tool\footnote{Available at \url{http://sphinx-doc.org/}}, it was created documentation using
 reStructuredText, a simple format to write documentation.
 Sphinx compile the \texttt{.rst} files into HTML files that create a browsable and very usable documentation.
+The main page of Diderot's documentation is shown in Figure \ref{figDocs}.
+A use example documentation is shown in Figure \ref{figDocs2}
+
+\begin{figure}[!hbt]
+    \centering
+    \label{figDocs}
+    \caption{Documentation main page}
+    \includegraphics[scale=0.4]{fig/documentation.png}
+\end{figure}
+
+\begin{figure}[!hbt]
+    \centering
+    \label{figDocs2}
+    \caption{User manual for checking expected inference use case}
+    \includegraphics[scale=0.4]{fig/documentation2.png}
+\end{figure}
 
 Besides the user documentation, API documentation was created automatically by using docstring code (i.e. comments on method headers) and
 the autodoc Sphinx plugin.

@@ -15,6 +15,6 @@ setup(
     url = 'http://github.com/icaromedeiros/diderot',
     platforms = [ 'Python 2.6 and newer' ],
     install_requires=[
-        "FuXi==1.4.1.production"
+        "FuXi==1.4.1.production", "sure==1.2.2"
     ]
 )

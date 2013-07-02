@@ -1,2 +1,2 @@
-FuXi==1.4.production
+FuXi==1.4.1.production
 sure==1.2.2
