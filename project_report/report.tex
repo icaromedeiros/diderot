@@ -1,19 +1,116 @@
 \documentclass{report}
 
 \setcounter{tocdepth}{3} % put subsubsections in TOC
-\usepackage{graphicx}
 \usepackage{url}
-\usepackage{hyperref}
 \usepackage[utf8]{inputenc}
 \usepackage[toc,page]{appendix}
 \linespread{1.5}
+
+%%% For syntax highlight in Sphinx generated listing codes
+%% graphicx and hyperref must not be reimported
+\usepackage{sphinx}
+
+\makeatletter
+\def\PYG@reset{\let\PYG@it=\relax \let\PYG@bf=\relax%
+    \let\PYG@ul=\relax \let\PYG@tc=\relax%
+    \let\PYG@bc=\relax \let\PYG@ff=\relax}
+\def\PYG@tok#1{\csname PYG@tok@#1\endcsname}
+\def\PYG@toks#1+{\ifx\relax#1\empty\else%
+    \PYG@tok{#1}\expandafter\PYG@toks\fi}
+\def\PYG@do#1{\PYG@bc{\PYG@tc{\PYG@ul{%
+    \PYG@it{\PYG@bf{\PYG@ff{#1}}}}}}}
+\def\PYG#1#2{\PYG@reset\PYG@toks#1+\relax+\PYG@do{#2}}
+
+\expandafter\def\csname PYG@tok@gd\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PYG@tok@gu\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PYG@tok@gt\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PYG@tok@gs\endcsname{\let\PYG@bf=\textbf}
+\expandafter\def\csname PYG@tok@gr\endcsname{\def\PYG@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PYG@tok@cm\endcsname{\let\PYG@it=\textit\def\PYG@tc##1{\textcolor[rgb]{0.25,0.50,0.56}{##1}}}
+\expandafter\def\csname PYG@tok@vg\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.73,0.38,0.84}{##1}}}
+\expandafter\def\csname PYG@tok@m\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
+\expandafter\def\csname PYG@tok@mh\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
+\expandafter\def\csname PYG@tok@cs\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.50,0.56}{##1}}\def\PYG@bc##1{\setlength{\fboxsep}{0pt}\colorbox[rgb]{1.00,0.94,0.94}{\strut ##1}}}
+\expandafter\def\csname PYG@tok@ge\endcsname{\let\PYG@it=\textit}
+\expandafter\def\csname PYG@tok@vc\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.73,0.38,0.84}{##1}}}
+\expandafter\def\csname PYG@tok@il\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
+\expandafter\def\csname PYG@tok@go\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.20,0.20,0.20}{##1}}}
+\expandafter\def\csname PYG@tok@cp\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
+\expandafter\def\csname PYG@tok@gi\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PYG@tok@gh\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PYG@tok@ni\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.84,0.33,0.22}{##1}}}
+\expandafter\def\csname PYG@tok@nl\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.13,0.44}{##1}}}
+\expandafter\def\csname PYG@tok@nn\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.05,0.52,0.71}{##1}}}
+\expandafter\def\csname PYG@tok@no\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.38,0.68,0.84}{##1}}}
+\expandafter\def\csname PYG@tok@na\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
+\expandafter\def\csname PYG@tok@nb\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
+\expandafter\def\csname PYG@tok@nc\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.05,0.52,0.71}{##1}}}
+\expandafter\def\csname PYG@tok@nd\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.33,0.33,0.33}{##1}}}
+\expandafter\def\csname PYG@tok@ne\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
+\expandafter\def\csname PYG@tok@nf\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.02,0.16,0.49}{##1}}}
+\expandafter\def\csname PYG@tok@si\endcsname{\let\PYG@it=\textit\def\PYG@tc##1{\textcolor[rgb]{0.44,0.63,0.82}{##1}}}
+\expandafter\def\csname PYG@tok@s2\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
+\expandafter\def\csname PYG@tok@vi\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.73,0.38,0.84}{##1}}}
+\expandafter\def\csname PYG@tok@nt\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.02,0.16,0.45}{##1}}}
+\expandafter\def\csname PYG@tok@nv\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.73,0.38,0.84}{##1}}}
+\expandafter\def\csname PYG@tok@s1\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
+\expandafter\def\csname PYG@tok@gp\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.78,0.36,0.04}{##1}}}
+\expandafter\def\csname PYG@tok@sh\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
+\expandafter\def\csname PYG@tok@ow\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
+\expandafter\def\csname PYG@tok@sx\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.78,0.36,0.04}{##1}}}
+\expandafter\def\csname PYG@tok@bp\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
+\expandafter\def\csname PYG@tok@c1\endcsname{\let\PYG@it=\textit\def\PYG@tc##1{\textcolor[rgb]{0.25,0.50,0.56}{##1}}}
+\expandafter\def\csname PYG@tok@kc\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
+\expandafter\def\csname PYG@tok@c\endcsname{\let\PYG@it=\textit\def\PYG@tc##1{\textcolor[rgb]{0.25,0.50,0.56}{##1}}}
+\expandafter\def\csname PYG@tok@mf\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
+\expandafter\def\csname PYG@tok@err\endcsname{\def\PYG@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PYG@tok@kd\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
+\expandafter\def\csname PYG@tok@ss\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.32,0.47,0.09}{##1}}}
+\expandafter\def\csname PYG@tok@sr\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.14,0.33,0.53}{##1}}}
+\expandafter\def\csname PYG@tok@mo\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
+\expandafter\def\csname PYG@tok@mi\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
+\expandafter\def\csname PYG@tok@kn\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
+\expandafter\def\csname PYG@tok@o\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PYG@tok@kr\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
+\expandafter\def\csname PYG@tok@s\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
+\expandafter\def\csname PYG@tok@kp\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
+\expandafter\def\csname PYG@tok@w\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PYG@tok@kt\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.56,0.13,0.00}{##1}}}
+\expandafter\def\csname PYG@tok@sc\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
+\expandafter\def\csname PYG@tok@sb\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
+\expandafter\def\csname PYG@tok@k\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
+\expandafter\def\csname PYG@tok@se\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
+\expandafter\def\csname PYG@tok@sd\endcsname{\let\PYG@it=\textit\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
+
+\def\PYGZbs{\char`\\}
+\def\PYGZus{\char`\_}
+\def\PYGZob{\char`\{}
+\def\PYGZcb{\char`\}}
+\def\PYGZca{\char`\^}
+\def\PYGZam{\char`\&}
+\def\PYGZlt{\char`\<}
+\def\PYGZgt{\char`\>}
+\def\PYGZsh{\char`\#}
+\def\PYGZpc{\char`\%}
+\def\PYGZdl{\char`\$}
+\def\PYGZhy{\char`\-}
+\def\PYGZsq{\char`\'}
+\def\PYGZdq{\char`\"}
+\def\PYGZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYGZat{@}
+\def\PYGZlb{[}
+\def\PYGZrb{]}
+\makeatother
+
+%%% For syntax highlight in Sphinx generated listing codes
 
 \begin{document}
 
 \title{Diderot - A Test Driven Development Tool for developing RDF/OWL ontologies}
 \author{
 Ícaro Medeiros\\
-Matrícula 1212403
+Registration (Matrícula) 1212403
 \\ \\ \\ \\ \\ \\ \\ \\
 Pontifical Catholic University of Rio de Janeiro \\
 Doctorate in Computer Science \\
@@ -27,20 +124,14 @@ Advisor: Prof. Daniel Schwabe
 
 \chapter{Introduction}
 
-Test Driven Development (TDD) techniques have been successfully used in
-software engineering \cite{beck03}, providing an iterative, agile and incremental way of developing
-code. In this approach, programmers start by writing tests for their code, then programming the code
-so the tests do not fail. Then code can be enhanced and checked against tests again, completing a desirable
-test-write-refactor cycle.
+Test Driven Development (TDD) techniques have been successfully used in software engineering \cite{beck03}, providing an iterative, agile and incremental way of developing code.
+In this approach, programmers start by writing tests for their code, then programming the code so the tests do not fail.
+Then the code can be enhanced and checked against tests again, completing a desirable test-write-refactor cycle.
 
-TDD is a safe methodology to develop programs, where we can be sure that changes do not
-introduce bugs or unexpected behavior by running our automated tests for our code. Moreover,
-by doing tests first, we can check our architecture decisions simply by being clients of our own code
-in our tests. And finally the tests can also be seen as a documentation about the code.
+TDD is a safe methodology to develop programs, where we can be sure that changes do not introduce bugs or unexpected behavior by running our automated tests for our code.
+Moreover, by doing tests first, we can check our architecture decisions simply by being clients of our own code in our tests. And finally the tests can also be seen as a documentation about the code.
 
-Almost all modern programming languages have unit test frameworks that enable to run
-automated tests for your code and engage into a TDD process for software, such as the xUnit
-framework \cite{beck03} and its implementations (JUnit, Python unit testing framework, etc).
+Almost all modern programming languages have unit test frameworks that enable to run automated tests for your code and engage into a TDD process for software, such as the xUnit framework \cite{beck03} and its implementations (JUnit, Python unit testing framework, etc).
 
 In a TDD approach you can start with simple software units, in a bottom-up way,
 rather than over modeling all your system in advance, the so called Big Design Up Front (BDUF).
@@ -111,6 +202,7 @@ The requirements of Diderot follows:
 \end{itemize}
 
 \subsection{Use Cases}
+\label{useCases}
 
 The use cases follow strictly the goals stated in Section \ref{goals}. A diagram summarizing the use cases is seen
 in Figure \ref{figUseCase}.
@@ -243,8 +335,16 @@ A use example documentation is shown in Figure \ref{figDocs2}
 Besides the user documentation, API documentation was created automatically by using docstring code (i.e. comments on method headers) and
 the autodoc Sphinx plugin.
 This enables programmers to understand how the code works very fast.
+It is also useful because API documentation does not need duplication, it is only in code.
+An example of our auto-documented API is in Figure \ref{figDocs3}
 
-% TODO Example with figure
+\begin{figure}[!hbt]
+    \centering
+    \label{figDocs3}
+    \caption{API documentation}
+    \includegraphics[scale=0.4]{fig/documentation3.png}
+\end{figure}
+
 
 \section{Installation}
 
@@ -252,9 +352,7 @@ To install Diderot, first users need to have Python 2.7 installed \footnote{Othe
 Pip tool is also need for installed all the required libraries \footnote{Instruction for installing pip can be found here \url{http://www.pip-installer.org/en/latest/installing.html}}.
 It is recommended to use virtualenv tool \footnote{It is recommended to use virtualenv with virtualenvwrapper. Install these tool by using \texttt{pip install virtualenv} and \texttt{pip install virtualenvwrapper}.} to use different environments for Python projects.
 
-After this, simply type \texttt{pip install diderot} and all its dependencies in the selected virtualenv, as seen in Figure \ref{figInstalling}.
-
-% TODO figure
+After this, simply run \texttt{pip install diderot} and all its dependencies will be installed in the selected virtualenv.
 
 \subsection{Diderot dependencies}
 
@@ -262,10 +360,212 @@ Diderot reuses some libraries to work, namely:
 
 \begin{itemize}
     \item \texttt{rdflib==2.4.2}. Library for parsing RDF files into Python objects, different types of RDF serialization and other facilities for dealing with RDF data.
-    \item \texttt{FuXi==1.4.production}. Library for OWL inference on Python.
+    \item \texttt{FuXi==1.4.1.production}. Library for OWL inference on Python.
         It is needed to infer facts that can be derived from ontologies.
+    \item \texttt{sure==1.2.2}. Library for fluent assertions in Python.
+
 \end{itemize}
-\section{Use Examples}
+\section{Examples}
+
+In this section we describe how to use Diderot, corresponding to the use cases presented in Section \ref{useCases}.
+
+\subsection{Checking Expected Inferences}
+
+In this example we can check if expected facts can be inferred from the ontology.
+
+Consider this simple ontology:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{@prefix }\PYG{n+nv}{example: }\PYG{n+nn}{\PYGZlt{}http://example.onto/\PYGZgt{} .}
+\PYG{k}{@prefix }\PYG{n+nv}{owl: }\PYG{n+nn}{\PYGZlt{}http://www.w3.org/2002/07/owl\PYGZsh{}\PYGZgt{} .}
+\PYG{k}{@prefix }\PYG{n+nv}{rdfs: }\PYG{n+nn}{\PYGZlt{}http://www.w3.org/2000/01/rdf\PYGZhy{}schema\PYGZsh{}\PYGZgt{} .}
+
+\PYG{n+nc}{example:Human }\PYG{o}{rdfs:subClassOf }\PYG{n+na}{e}\PYG{n+na}{x}\PYG{n+na}{a}\PYG{n+na}{m}\PYG{n+na}{p}\PYG{n+na}{l}\PYG{n+na}{e}\PYG{n+na}{:}\PYG{n+na}{M}\PYG{n+na}{o}\PYG{n+na}{r}\PYG{n+na}{t}\PYG{n+na}{a}\PYG{n+na}{l }.
+\PYG{n+nc}{example:Icaro }\PYG{o}{a }\PYG{n+na}{e}\PYG{n+na}{x}\PYG{n+na}{a}\PYG{n+na}{m}\PYG{n+na}{p}\PYG{n+na}{l}\PYG{n+na}{e}\PYG{n+na}{:}\PYG{n+na}{H}\PYG{n+na}{u}\PYG{n+na}{m}\PYG{n+na}{a}\PYG{n+na}{n }.
+\end{Verbatim}
+
+It says that \code{Human} is a sub class of \code{Mortal}, and that \code{Icaro} is a human.
+From this one can simply infer that \code{Icaro} is mortal.
+
+Moreover, as the domain and range of the property \code{rdfs:subClassOf} is \code{rdfs:Class} and \code{owl:Class} is sub class of \code{rdfs:Class}, both \code{Mortal} and \code{Human} are instances of \code{owl:Class}. So, the expected facts are:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{@prefix }\PYG{n+nv}{example: }\PYG{n+nn}{\PYGZlt{}http://example.onto/\PYGZgt{} .}
+\PYG{k}{@prefix }\PYG{n+nv}{owl: }\PYG{n+nn}{\PYGZlt{}http://www.w3.org/2002/07/owl\PYGZsh{}\PYGZgt{} .}
+
+\PYG{n+nc}{example:Icaro }\PYG{o}{a }\PYG{n+na}{e}\PYG{n+na}{x}\PYG{n+na}{a}\PYG{n+na}{m}\PYG{n+na}{p}\PYG{n+na}{l}\PYG{n+na}{e}\PYG{n+na}{:}\PYG{n+na}{M}\PYG{n+na}{o}\PYG{n+na}{r}\PYG{n+na}{t}\PYG{n+na}{a}\PYG{n+na}{l }.
+\PYG{n+nc}{example:Mortal }\PYG{o}{a }\PYG{n+na}{o}\PYG{n+na}{w}\PYG{n+na}{l}\PYG{n+na}{:}\PYG{n+na}{C}\PYG{n+na}{l}\PYG{n+na}{a}\PYG{n+na}{s}\PYG{n+na}{s }.
+\PYG{n+nc}{example:Human }\PYG{o}{a }\PYG{n+na}{o}\PYG{n+na}{w}\PYG{n+na}{l}\PYG{n+na}{:}\PYG{n+na}{C}\PYG{n+na}{l}\PYG{n+na}{a}\PYG{n+na}{s}\PYG{n+na}{s }.
+\end{Verbatim}
+
+To test if the expected facts are indeed inferred by the given ontology we can implement this simple Python code:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{from} \PYG{n+nn}{diderot} \PYG{k+kn}{import} \PYG{n}{DiderotTestCase}\PYG{p}{,} \PYG{n}{can\PYGZus{}infer}
+
+
+\PYG{k}{class} \PYG{n+nc}{ExpectedFactsTestCase}\PYG{p}{(}\PYG{n}{DiderotTestCase}\PYG{p}{)}\PYG{p}{:}
+
+    \PYG{k}{def} \PYG{n+nf}{test\PYGZus{}check\PYGZus{}expected\PYGZus{}facts}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n}{EXPECTED\PYGZus{}FACTS\PYGZus{}FILE} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{example/db/check\PYGZus{}expected\PYGZus{}facts/expected\PYGZus{}facts.n3}\PYG{l+s}{\PYGZdq{}}
+        \PYG{n}{ONTOLOGY\PYGZus{}FILE} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{example/db/check\PYGZus{}expected\PYGZus{}facts/ontology.n3}\PYG{l+s}{\PYGZdq{}}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{assert\PYGZus{}that}\PYG{p}{(}\PYG{n}{can\PYGZus{}infer}\PYG{p}{(}\PYG{n}{EXPECTED\PYGZus{}FACTS\PYGZus{}FILE}\PYG{p}{)}\PYG{o}{.}\PYG{n}{from\PYGZus{}facts}\PYG{p}{(}\PYG{n}{ONTOLOGY\PYGZus{}FILE}\PYG{p}{)}\PYG{p}{)}
+\end{Verbatim}
+
+Now consider that we add the triple \code{example:Icaro a example:Student} to the expected facts file.
+
+It is quite obvious that this fact can not be inferred from the ontology.
+Then, when running the tests, an \code{AssertionError} will be raised with the expected facts that could not be inferred.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{}} make \PYG{n+nb}{test}
+\PYG{g+go}{======================================================================}
+\PYG{g+go}{FAIL: test\PYGZus{}some\PYGZus{}expected\PYGZus{}facts\PYGZus{}can\PYGZus{}not\PYGZus{}be\PYGZus{}inferred (test.test\PYGZus{}expected\PYGZus{}facts.ExpectedFactsTestCase)}
+\PYG{g+go}{\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{g+go}{Traceback (most recent call last):}
+\PYG{g+go}{  File \PYGZdq{}/path/test\PYGZus{}expected\PYGZus{}facts.py\PYGZdq{}, line 16, in test\PYGZus{}some\PYGZus{}expected\PYGZus{}facts\PYGZus{}can\PYGZus{}not\PYGZus{}be\PYGZus{}inferred}
+\PYG{g+go}{    self.assertThat(can\PYGZus{}infer(EXPECTED\PYGZus{}FACTS\PYGZus{}FILE).from\PYGZus{}facts(ONTOLOGY\PYGZus{}FILE))}
+\PYG{g+go}{  File \PYGZdq{}/path/diderot/diderot/case.py\PYGZdq{}, line 37, in assertThat}
+\PYG{g+go}{    raise AssertionError(ASSERTION\PYGZus{}ERROR\PYGZus{}MESSAGE.format(not\PYGZus{}inferred\PYGZus{}graph.serialize(format=\PYGZdq{}nt\PYGZdq{})))}
+\PYG{g+go}{AssertionError: Could not infer some expected facts:}
+\PYG{g+go}{  \PYGZlt{}http://example.onto/Icaro\PYGZgt{} \PYGZlt{}http://www.w3.org/1999/02/22\PYGZhy{}rdf\PYGZhy{}syntax\PYGZhy{}ns\PYGZsh{}type\PYGZgt{} }
+\PYG{g+go}{     \PYGZlt{}http://example.onto/Student\PYGZgt{}.}
+\end{Verbatim}
+
+
+\subsection{Check Answering to Competency Question}
+
+In this example we can ask to ontologies questions we expect them to answer.
+
+Consider this simple ontology:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{@prefix }\PYG{n+nv}{example: }\PYG{n+nn}{\PYGZlt{}http://example.onto/\PYGZgt{} .}
+\PYG{k}{@prefix }\PYG{n+nv}{owl: }\PYG{n+nn}{\PYGZlt{}http://www.w3.org/2002/07/owl\PYGZsh{}\PYGZgt{} .}
+\PYG{k}{@prefix }\PYG{n+nv}{rdfs: }\PYG{n+nn}{\PYGZlt{}http://www.w3.org/2000/01/rdf\PYGZhy{}schema\PYGZsh{}\PYGZgt{} .}
+\PYG{k}{@prefix }\PYG{n+nv}{xsd: }\PYG{n+nn}{\PYGZlt{}http://www.w3.org/2001/XMLSchema\PYGZsh{}\PYGZgt{} .}
+
+\PYG{n+nc}{example:Human }\PYG{o}{rdfs:subClassOf }\PYG{n+na}{e}\PYG{n+na}{x}\PYG{n+na}{a}\PYG{n+na}{m}\PYG{n+na}{p}\PYG{n+na}{l}\PYG{n+na}{e}\PYG{n+na}{:}\PYG{n+na}{M}\PYG{n+na}{o}\PYG{n+na}{r}\PYG{n+na}{t}\PYG{n+na}{a}\PYG{n+na}{l }.
+
+\PYG{n+nc}{example:name }\PYG{o}{a           }\PYG{n+na}{o}\PYG{n+na}{w}\PYG{n+na}{l}\PYG{n+na}{:}\PYG{n+na}{D}\PYG{n+na}{a}\PYG{n+na}{t}\PYG{n+na}{a}\PYG{n+na}{t}\PYG{n+na}{y}\PYG{n+na}{p}\PYG{n+na}{e}\PYG{n+na}{P}\PYG{n+na}{r}\PYG{n+na}{o}\PYG{n+na}{p}\PYG{n+na}{e}\PYG{n+na}{r}\PYG{n+na}{t}\PYG{n+na}{y };
+             \PYG{o}{rdfs:domain }\PYG{n+na}{e}\PYG{n+na}{x}\PYG{n+na}{a}\PYG{n+na}{m}\PYG{n+na}{p}\PYG{n+na}{l}\PYG{n+na}{e}\PYG{n+na}{:}\PYG{n+na}{H}\PYG{n+na}{u}\PYG{n+na}{m}\PYG{n+na}{a}\PYG{n+na}{n };
+             \PYG{o}{rdfs:range  }\PYG{n+na}{x}\PYG{n+na}{s}\PYG{n+na}{d}\PYG{n+na}{:}\PYG{n+na}{s}\PYG{n+na}{t}\PYG{n+na}{r}\PYG{n+na}{i}\PYG{n+na}{n}\PYG{n+na}{g }.
+
+\PYG{n+nc}{example:age }\PYG{o}{a           }\PYG{n+na}{o}\PYG{n+na}{w}\PYG{n+na}{l}\PYG{n+na}{:}\PYG{n+na}{D}\PYG{n+na}{a}\PYG{n+na}{t}\PYG{n+na}{a}\PYG{n+na}{t}\PYG{n+na}{y}\PYG{n+na}{p}\PYG{n+na}{e}\PYG{n+na}{P}\PYG{n+na}{r}\PYG{n+na}{o}\PYG{n+na}{p}\PYG{n+na}{e}\PYG{n+na}{r}\PYG{n+na}{t}\PYG{n+na}{y };
+            \PYG{o}{rdfs:domain }\PYG{n+na}{e}\PYG{n+na}{x}\PYG{n+na}{a}\PYG{n+na}{m}\PYG{n+na}{p}\PYG{n+na}{l}\PYG{n+na}{e}\PYG{n+na}{:}\PYG{n+na}{H}\PYG{n+na}{u}\PYG{n+na}{m}\PYG{n+na}{a}\PYG{n+na}{n };
+            \PYG{o}{rdfs:range  }\PYG{n+na}{x}\PYG{n+na}{s}\PYG{n+na}{d}\PYG{n+na}{:}\PYG{n+na}{n}\PYG{n+na}{o}\PYG{n+na}{n}\PYG{n+na}{N}\PYG{n+na}{e}\PYG{n+na}{g}\PYG{n+na}{a}\PYG{n+na}{t}\PYG{n+na}{i}\PYG{n+na}{v}\PYG{n+na}{e}\PYG{n+na}{I}\PYG{n+na}{n}\PYG{n+na}{t}\PYG{n+na}{e}\PYG{n+na}{g}\PYG{n+na}{e}\PYG{n+na}{r }.
+
+\PYG{n+nc}{example:Icaro }\PYG{o}{a            }\PYG{n+na}{e}\PYG{n+na}{x}\PYG{n+na}{a}\PYG{n+na}{m}\PYG{n+na}{p}\PYG{n+na}{l}\PYG{n+na}{e}\PYG{n+na}{:}\PYG{n+na}{H}\PYG{n+na}{u}\PYG{n+na}{m}\PYG{n+na}{a}\PYG{n+na}{n };
+              \PYG{o}{example:name }\PYG{l+s}{\PYGZdq{}Icaro\PYGZdq{} };
+              \PYG{o}{example:age  }\PYG{n+na}{2}\PYG{n+na}{6 }.
+\end{Verbatim}
+
+It states that humans (instances of \code{example:Human}) can have name and age.
+Moreover, it defines an instance of \code{example:Human}, \code{example:Icaro}, that has a name \code{Icaro} and age of \code{26}.
+So, we might want to check if the ontology can answer: is there any humans with the properties names and ages?
+
+In Diderot we can check this by using this simple Python code below.
+In lines \code{6-13} we translated the question stated before as a SPARQL query.
+Then, in line \code{15}, we call \code{self.assert\_that(can\_answer(QUESTION).from\_ontology(ONTOLOGY\_FILE))} with an ontology file and a question as parameters to check if the ontology can answer the given question.
+
+\begin{Verbatim}[commandchars=\\\{\},numbers=left,firstnumber=1,stepnumber=1]
+\PYG{k+kn}{from} \PYG{n+nn}{diderot} \PYG{k+kn}{import} \PYG{n}{DiderotTestCase}\PYG{p}{,} \PYG{n}{can\PYGZus{}answer}
+
+\PYG{k}{class} \PYG{n+nc}{ExpectedFactsTestCase}\PYG{p}{(}\PYG{n}{DiderotTestCase}\PYG{p}{)}\PYG{p}{:}
+
+    \PYG{k}{def} \PYG{n+nf}{test\PYGZus{}check\PYGZus{}can\PYGZus{}answer}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n}{QUESTION} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s}{        SELECT ?human ?age ?name}
+\PYG{l+s}{        WHERE \PYGZob{}}
+\PYG{l+s}{            ?human a                          \PYGZlt{}http://example.onto/Human\PYGZgt{} ;}
+\PYG{l+s}{                   \PYGZlt{}http://example.onto/age\PYGZgt{}  26 ;}
+\PYG{l+s}{                   \PYGZlt{}http://example.onto/name\PYGZgt{} }\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{Icaro}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{ .}
+\PYG{l+s}{        \PYGZcb{}}
+\PYG{l+s}{        }\PYG{l+s}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+        \PYG{n}{ONTOLOGY\PYGZus{}FILE} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{example/db/answering\PYGZus{}competency\PYGZus{}question/ontology.n3}\PYG{l+s}{\PYGZdq{}}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{assert\PYGZus{}that}\PYG{p}{(}\PYG{n}{can\PYGZus{}answer}\PYG{p}{(}\PYG{n}{QUESTION}\PYG{p}{)}\PYG{o}{.}\PYG{n}{from\PYGZus{}ontology}\PYG{p}{(}\PYG{n}{ONTOLOGY\PYGZus{}FILE}\PYG{p}{)}\PYG{p}{)}
+\end{Verbatim}
+
+Only \code{SELECT} and \code{ASK} queries are accepted.
+The test will pass if the query result is not empty (for \code{SELECT} queries) or \code{True} (for \code{ASK} queries).
+
+If we ask to the aforementioned ontology if there is any god (that don't exist, at least in the database) the test will fail:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{}} make \PYG{n+nb}{test}
+\PYG{g+go}{======================================================================}
+\PYG{g+go}{FAIL: test\PYGZus{}is\PYGZus{}there\PYGZus{}a\PYGZus{}god (test.test\PYGZus{}competency\PYGZus{}question\PYGZus{}answering.ExpectedFactsTestCase)}
+\PYG{g+go}{\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{g+go}{Traceback (most recent call last):}
+\PYG{g+go}{  File /path/test\PYGZus{}competency\PYGZus{}question\PYGZus{}answering.py\PYGZdq{}, line 51, in test\PYGZus{}is\PYGZus{}there\PYGZus{}a\PYGZus{}god}
+\PYG{g+go}{    self.assert\PYGZus{}that(can\PYGZus{}answer(QUESTION).from\PYGZus{}ontology(ONTOLOGY\PYGZus{}FILE))}
+\PYG{g+go}{  File /path/case.py\PYGZdq{}, line 30, in assert\PYGZus{}that}
+\PYG{g+go}{    raise AssertionError(assertion.assertion\PYGZus{}error\PYGZus{}message)}
+\PYG{g+go}{AssertionError: ASK query returned false.}
+\PYG{g+go}{  Query:}
+\PYG{g+go}{        ASK \PYGZob{}}
+\PYG{g+go}{            ?god a \PYGZlt{}http://example.onto/God\PYGZgt{} .}
+\PYG{g+go}{        \PYGZcb{}}
+\end{Verbatim}
+
+However, in this case we only wanted to check if the ontology \textbf{can} answer the question.
+Another useful use case is to check if the ontology can answer the question with a \textbf{specific expected answer}.
+
+This can be done with the Python code below.
+The new thing is the argument \code{EXPECTED\_ANSWER} passed to \code{with\_answer()}.
+It states expected results for the SPARQL query as a list of tuples of python primitive types (\code{int}, \code{string}, etc) or a \code{RDFlib.URIRef} for URIs.
+The tuples should follow the order of the variables in the \code{SELECT} clause in the SPARQL query.
+So, the tuple \code{(URIRef("http://example.onto/Icaro"), 26, "Icaro")} match the variables \code{?human, ?age, ?name}, respectively.
+
+\begin{Verbatim}[commandchars=\\\{\},numbers=left,firstnumber=1,stepnumber=1]
+\PYG{k+kn}{from} \PYG{n+nn}{diderot} \PYG{k+kn}{import} \PYG{n}{DiderotTestCase}\PYG{p}{,} \PYG{n}{can\PYGZus{}answer}
+\PYG{k+kn}{from} \PYG{n+nn}{rdflib} \PYG{k+kn}{import} \PYG{n}{URIRef}
+
+\PYG{k}{class} \PYG{n+nc}{ExpectedFactsTestCase}\PYG{p}{(}\PYG{n}{DiderotTestCase}\PYG{p}{)}\PYG{p}{:}
+    \PYG{k}{def} \PYG{n+nf}{test\PYGZus{}check\PYGZus{}can\PYGZus{}answer\PYGZus{}with\PYGZus{}answer}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n}{QUESTION} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s}{        SELECT ?human ?age ?name}
+\PYG{l+s}{        WHERE \PYGZob{}}
+\PYG{l+s}{            ?human a                          \PYGZlt{}http://example.onto/Human\PYGZgt{} ;}
+\PYG{l+s}{                   \PYGZlt{}http://example.onto/age\PYGZgt{}  ?age ;}
+\PYG{l+s}{                   \PYGZlt{}http://example.onto/name\PYGZgt{} ?name .}
+\PYG{l+s}{        \PYGZcb{}}
+\PYG{l+s}{        }\PYG{l+s}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+        \PYG{n}{EXPECTED\PYGZus{}ANSWER} \PYG{o}{=} \PYG{p}{[}\PYG{p}{(}\PYG{n}{URIRef}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{http://example.onto/Icaro}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}\PYG{p}{,} \PYG{l+m+mi}{26}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{Icaro}\PYG{l+s}{\PYGZdq{}}\PYG{p}{)}\PYG{p}{]}
+        \PYG{n}{ONTOLOGY\PYGZus{}FILE} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}}\PYG{l+s}{example/db/answering\PYGZus{}competency\PYGZus{}question/ontology.n3}\PYG{l+s}{\PYGZdq{}}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{assert\PYGZus{}that}\PYG{p}{(}\PYG{n}{can\PYGZus{}answer}\PYG{p}{(}\PYG{n}{QUESTION}\PYG{p}{)}\PYG{o}{.}\PYG{n}{from\PYGZus{}ontology}\PYG{p}{(}\PYG{n}{ONTOLOGY\PYGZus{}FILE}\PYG{p}{)}\PYG{o}{.}\PYGZbs{}
+                         \PYG{n}{with\PYGZus{}answer}\PYG{p}{(}\PYG{n}{EXPECTED\PYGZus{}ANSWER}\PYG{p}{)}\PYG{p}{)}
+\end{Verbatim}
+
+If expected answers and query results are not equal, the test will fail:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZdl{}} make \PYG{n+nb}{test}
+\PYG{g+go}{======================================================================}
+\PYG{g+go}{FAIL: test\PYGZus{}unexpected\PYGZus{}answer (test.test\PYGZus{}competency\PYGZus{}question\PYGZus{}answering.ExpectedFactsTestCase)}
+\PYG{g+go}{\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{g+go}{Traceback (most recent call last):}
+\PYG{g+go}{  File \PYGZdq{}/path/test\PYGZus{}competency\PYGZus{}question\PYGZus{}answering.py\PYGZdq{}, line 75, in test\PYGZus{}unexpected\PYGZus{}answer}
+\PYG{g+go}{    with\PYGZus{}answer(EXPECTED\PYGZus{}ANSWER))}
+\PYG{g+go}{  File \PYGZdq{}/path/diderot/case.py\PYGZdq{}, line 30, in assert\PYGZus{}that}
+\PYG{g+go}{    raise AssertionError(assertion.assertion\PYGZus{}error\PYGZus{}message)}
+\PYG{g+go}{AssertionError: Query result is different from expected answer.}
+\PYG{g+go}{  given}
+\PYG{g+go}{X = [(rdflib.URIRef(\PYGZsq{}http://example.onto/Icaro\PYGZsq{}), \PYGZbs{}}
+\PYG{g+go}{      rdflib.Literal(u\PYGZsq{}26\PYGZsq{}, datatype=rdflib.URIRef(\PYGZsq{}http://www.w3.org/2001/XMLSchema\PYGZsh{}integer\PYGZsq{})),\PYGZbs{}}
+\PYG{g+go}{      rdflib.Literal(u\PYGZsq{}Icaro\PYGZsq{}))]}
+\PYG{g+go}{    and}
+\PYG{g+go}{Y = [(rdflib.URIRef(\PYGZsq{}http://example.onto/Icaro\PYGZsq{}), \PYGZbs{}}
+\PYG{g+go}{      64, \PYGZbs{}}
+\PYG{g+go}{      \PYGZsq{}Icaro Medeiros\PYGZsq{})]}
+\PYG{g+go}{X[0][1] is rdflib.Literal(u\PYGZsq{}26\PYGZsq{}, datatype=rdflib.URIRef(\PYGZsq{}http://www.w3.org/2001/XMLSchema\PYGZsh{}integer\PYGZsq{}))}
+\PYG{g+go}{  whereas Y[0][1] is 64}
+\end{Verbatim}
+
+Note that the query result returns a \code{rdflib.Literal} object, that is transformed to a python primitive type (such as \code{int} or \code{string}) when trying to compare with expected answers if it is not a URI reference.
+
+
+
 
 \chapter{Conclusion}
 \label{conclusion}
